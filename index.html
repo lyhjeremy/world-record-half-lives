@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>World-Record Half-Lives — how long records stand</title>
+<meta name="description" content="A survival analysis of track & field world records: how long they stand, why modern records last longer, and which of today's records is most likely to fall next.">
+<style>
+  :root{ --paper:#FBF8F1; --ink:#1a1a2e; --wine:#7a1f2b; --gold:#D4A537; --mut:#6b6656; }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+       font-family:Georgia,'Times New Roman',serif;line-height:1.65;}
+  .band{background:var(--ink);color:var(--paper);padding:0;}
+  .band svg{display:block;width:100%;height:auto}
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px;}
+  header .wrap{padding:38px 22px 30px;}
+  h1{font-size:2.15rem;line-height:1.15;margin:0 0 10px;}
+  .sub{font-size:1.15rem;color:#d8d2c4;margin:0;font-style:italic;}
+  h2{font-size:1.5rem;margin:2.4em 0 .5em;border-bottom:2px solid var(--gold);padding-bottom:.2em;}
+  p{margin:.8em 0;}
+  .lead{font-size:1.18rem;}
+  figure{margin:1.6em 0;text-align:center;}
+  figure img{max-width:100%;height:auto;border:1px solid #e7e0d0;border-radius:6px;background:#fff;}
+  figcaption{font-size:.92rem;color:var(--mut);margin-top:.5em;font-style:italic;}
+  .stats{display:flex;flex-wrap:wrap;gap:14px;margin:1.4em 0;}
+  .stat{flex:1 1 150px;background:#fff;border:1px solid #e7e0d0;border-left:4px solid var(--gold);
+        border-radius:5px;padding:14px 16px;}
+  .stat b{display:block;font-size:1.7rem;color:var(--wine);line-height:1.1;}
+  .stat span{font-size:.9rem;color:var(--mut);}
+  em.k{color:var(--wine);font-style:normal;font-weight:bold;}
+  a{color:var(--wine);}
+  footer{border-top:1px solid #e0d9c8;margin-top:3em;padding:22px 0 50px;color:var(--mut);font-size:.92rem;}
+  code{background:#efe9db;padding:.05em .35em;border-radius:3px;font-size:.9em;}
+</style>
+</head>
+<body>
+<div class="band">
+  <svg viewBox="0 0 760 132" preserveAspectRatio="none" role="img" aria-label="decaying record progression">
+    <polyline points="0,26 90,44 150,58 220,70 300,82 400,92 520,100 660,106 760,110"
+      fill="none" stroke="#D4A537" stroke-width="3"/>
+    <line x1="0" y1="118" x2="760" y2="118" stroke="#3a3a55" stroke-width="1"/>
+    <circle cx="760" cy="110" r="4.5" fill="#D4A537"/>
+  </svg>
+</div>
+<header>
+  <div class="wrap">
+    <h1>World-Record Half-Lives</h1>
+    <p class="sub">How long does a world record stand — and which of today's is next to fall?</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <p class="lead">A world record has a lifespan. It is born the day it is set and dies the day
+  someone beats it — and the records standing today simply haven't died <em>yet</em>. That is
+  exactly the shape of a <strong>survival analysis</strong>: durations, some of them still running.
+  So I turned a century of athletics into survival data — ~250 record "reigns" across nine events —
+  and let the model tell us how long records live, why that's changing, and which current records
+  look most exposed.</p>
+
+  <div class="stats">
+    <div class="stat"><b>~1.5 yr</b><span>median record half-life — most records fall fast</span></div>
+    <div class="stat"><b>≈ 2×</b><span>longer that modern (post-1980) records survive</span></div>
+    <div class="stat"><b>9</b><span>events, each verified complete against the real world record</span></div>
+  </div>
+
+  <h2>Records fall fast — but far less than they used to</h2>
+  <p>The median record survives only about a year and a half: someone is usually right behind.
+  But that number hides a heavy tail, and the tail is growing. Split the survival curve by era and
+  a record set since 1980 clearly outlives an older one — the modern game is harder to move. A
+  proportional-hazards model agrees: being a modern record roughly <em class="k">halves</em> the
+  chance of being broken, and records set by a <em class="k">big margin</em> last longer still.</p>
+  <figure>
+    <img src="figures/record_survival.png" alt="Kaplan-Meier survival curves for records set before vs after 1980">
+    <figcaption>Kaplan-Meier survival of world records. Post-1980 records (wine) outlast pre-1980 ones (grey).</figcaption>
+  </figure>
+
+  <h2>Every progression bends toward a wall</h2>
+  <p>Plot each event's record over time and the same shape appears everywhere: each new record
+  shaves a little less than the one before, the curve flattening toward some human limit. For the
+  women's 800 m and high jump that plateau has plainly arrived; for the distance events the curve is
+  still dropping.</p>
+  <figure>
+    <img src="figures/progressions.png" alt="Record progressions for four events with fitted deceleration curves">
+    <figcaption>Record progressions with fitted deceleration. Each jump is smaller than the last.</figcaption>
+  </figure>
+
+  <h2>So which record falls next?</h2>
+  <p>Because a record's risk is highest early, the cleanest forecast comes straight from the survival
+  curve: given that a record has <em>already</em> survived so many years, what's the chance it falls
+  in the next five? Fresh records score high — the <em class="k">2023 marathon</em> (~60%) in the
+  super-shoe era, the <em class="k">2024 women's high jump</em> (~59%). Old records have earned their
+  safety by surviving the dangerous years — and Kratochvílová's <em class="k">1983 women's 800 m</em>
+  comes out near <em class="k">zero</em>, the statistical picture of a record no one expects to fall.</p>
+  <figure>
+    <img src="figures/vulnerability.png" alt="Model probability each current record falls within five years">
+    <figcaption>Five-year fall probability for each current record, from the survival model.</figcaption>
+  </figure>
+
+  <h2>A note on the data</h2>
+  <p>The progressions come from Wikipedia, but those pages bury the real record history among
+  top-lists and side tables — scrape carelessly and you get truncated or fictional records. Every
+  event here had to pass a hard test: its reconstructed best must equal the current ratified world
+  record. Nine events passed; the rest were left out rather than shown half-true. The
+  <a href="https://github.com/lyhjeremy/world-record-half-lives">code and full method</a> are on GitHub.</p>
+</main>
+
+<footer>
+  <div class="wrap">
+    Built by <a href="https://github.com/lyhjeremy">Jeremy Lee</a> ·
+    <a href="https://github.com/lyhjeremy/world-record-half-lives">source on GitHub</a> ·
+    record data from Wikipedia · Kaplan-Meier &amp; Cox via <code>lifelines</code>.
+  </div>
+</footer>
+</body>
+</html>
