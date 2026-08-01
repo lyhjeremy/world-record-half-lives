@@ -3,6 +3,7 @@
 **How long does a track & field world record stand — and which of today's records is the survival model betting against?**
 
 > 🌐 **Overview:** https://lyhjeremy.github.io/world-record-half-lives/
+> 📖 **In depth:** https://lyhjeremy.github.io/world-record-half-lives/overview/
 
 Athletics world records don't fall randomly. Some are broken within months; others
 — Kratochvílová's 800 m from **1983** — have outlasted the careers of everyone who

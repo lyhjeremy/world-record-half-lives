@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>World-Record Half-Lives — survival analysis on 250 record reigns</title>
+<meta name="description" content="Treating every world record as a survival-time problem. Kaplan-Meier puts the half-life at about 1.5 years, Cox says modern records last twice as long, and today's records get a five-year fall probability." />
+<meta name="theme-color" content="#FBF8F1" />
+<meta property="og:title" content="World-Record Half-Lives" />
+<meta property="og:description" content="Records that are still standing are censored, not missing. Survival analysis on 250 reigns across nine events." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lyhjeremy.github.io/world-record-half-lives/overview/" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #FBF8F1;
+    --card: #FFFFFF;
+    --plate: #FFFFFF;
+    --ink: #1a1a2e;
+    --ink2: #3d3d55;
+    --muted: #6B7280;
+    --rule: #E5DCC7;
+    --accent: #6D28D9;
+    --accent2: #B45309;
+    --link: #0E7490;
+    --serif: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+    --sans: 'Source Sans 3', -apple-system, system-ui, sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
+    --shadow: 0 1px 2px rgba(26,26,46,.05), 0 10px 34px rgba(26,26,46,.07);
+    --spine:  92px;
+    --col:    min(100% - 2.6rem, 62rem);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #14141f;
+      --card: #1c1c2a;
+      --plate: #f7f4ec;
+      --ink: #F2EFE6;
+      --ink2: #C9C4B6;
+      --muted: #918B7D;
+      --rule: #33313f;
+      --accent: #A78BFA;
+      --accent2: #E3BC5E;
+      --link: #22D3EE;
+      --shadow: 0 1px 2px rgba(0,0,0,.32), 0 10px 34px rgba(0,0,0,.4);
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--serif); font-size: clamp(17px, 0.55rem + 0.6vw, 19.5px);
+    line-height: 1.68; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  img { max-width: 100%; height: auto; display: block; }
+  a { color: var(--link); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+  strong { font-weight: 700; color: var(--ink); }
+  code { font-family: var(--mono); font-size: .86em;
+         background: color-mix(in srgb, var(--ink) 7%, transparent);
+         padding: .12em .38em; border-radius: 4px; }
+  .wrap { width: var(--col); margin: 0 auto; }
+
+  .eyebrow { font-family: var(--mono); font-weight: 600; font-size: 11.5px;
+             letter-spacing: .17em; text-transform: uppercase; color: var(--muted);
+             margin: 0 0 14px; }
+
+  .masthead { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; padding: 30px 0 0; }
+  .logo { font-family: var(--sans); font-weight: 800; font-size: 21px;
+          letter-spacing: -.02em; display: flex; align-items: center; gap: 9px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); flex: none; }
+  .tagline { font-size: 15px; color: var(--ink2); font-family: var(--sans); }
+
+  .hero { padding: 44px 0 54px; }
+  .kicker { font-family: var(--sans); font-size: clamp(18px, 2.1vw, 23px); font-weight: 600;
+            color: var(--muted); margin: 0 0 8px; letter-spacing: -.01em; }
+  .hero h1 { font-family: var(--sans); font-size: clamp(37px, 6vw, 72px); font-weight: 800;
+             letter-spacing: -.035em; line-height: 1.04; margin: 0; max-width: 17ch; }
+  .hero-sub { margin: 24px 0 0; font-size: 1.06em; color: var(--ink2); max-width: 60ch; }
+
+  .cta-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 30px; align-items: center; }
+  .btn { display: inline-block; padding: 13px 26px; border-radius: 8px;
+         font-family: var(--sans); font-weight: 700; font-size: 16px;
+         text-decoration: none; border: 1px solid var(--ink); transition: transform .15s ease; }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary { background: var(--ink); color: var(--paper); }
+  .textlink { font-family: var(--sans); font-size: 16px; font-weight: 600; color: var(--ink2);
+              text-decoration: underline; text-underline-offset: 4px;
+              text-decoration-thickness: 1px; }
+  .textlink:hover { color: var(--ink); }
+
+  .claims { display: grid; grid-template-columns: 1fr; gap: 0 52px; margin: 50px 0 0; }
+  @media (min-width: 760px) { .claims { grid-template-columns: 1fr 1fr; } }
+  .claim { padding: 18px 0 20px; border-top: 1px solid var(--rule); }
+  .claim:first-child, .claim:nth-child(2) { border-top: 2px solid var(--ink); }
+  @media (max-width: 759px) { .claim:nth-child(2) { border-top: 1px solid var(--rule); } }
+  .claim .n { font-family: var(--sans); font-weight: 800; font-size: 40px; line-height: 1.05;
+              color: var(--accent); letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+  .claim h3 { margin: 0 0 6px; }
+  .claim p { margin: 9px 0 0; font-size: 15.5px; color: var(--ink2); line-height: 1.5;
+             font-family: var(--sans); }
+
+  .route { position: relative; padding-bottom: 30px; }
+  .route::before { content: ""; position: absolute; left: calc(var(--spine) / 2); top: 8px;
+                   bottom: 80px; width: 2px; background: var(--rule); }
+  .stop { position: relative; padding: 0 0 76px var(--spine); }
+  .stop::before { content: ""; position: absolute; left: calc(var(--spine) / 2 - 7px); top: 7px;
+                  width: 16px; height: 16px; border-radius: 50%;
+                  background: var(--paper); border: 2px solid var(--ink); box-sizing: border-box; }
+  .stop--key::before { background: var(--accent); border-color: var(--accent); }
+  .stop--warn::before { background: var(--accent2); border-color: var(--accent2); }
+  .stop--end::before { background: var(--ink); }
+
+  h2 { font-family: var(--sans); font-size: clamp(27px, 3.7vw, 38px); font-weight: 800;
+       letter-spacing: -.027em; line-height: 1.13; margin: 12px 0 16px; max-width: 19ch; }
+  h3 { font-family: var(--sans); font-size: 17px; font-weight: 700; margin: 0 0 7px;
+       letter-spacing: -.012em; }
+  .stop p { margin: 0 0 17px; max-width: 60ch; color: var(--ink2); }
+
+  .bignum { font-family: var(--sans); font-weight: 800; font-size: clamp(74px, 10vw, 128px);
+            line-height: .86; letter-spacing: -.05em; margin: 6px 0 4px; color: var(--accent);
+            font-variant-numeric: tabular-nums; }
+  .bignum-note { font-family: var(--sans); font-size: 16px; color: var(--muted); margin: 0 0 20px; }
+
+  /* A white-background chart would glow in dark mode; the plate makes it read
+     as a deliberately printed page instead. */
+  figure { margin: 28px 0 0; }
+  .plate { background: var(--plate); border: 1px solid var(--rule); border-radius: 10px;
+           padding: 14px; box-shadow: var(--shadow); overflow: hidden; }
+  .plate img { border-radius: 4px; }
+  .plate--flush { padding: 0; }
+  .shot { border-radius: 10px; border: 1px solid var(--rule); box-shadow: var(--shadow);
+          overflow: hidden; background: var(--card); }
+  /* min() so the cap never exceeds the column on a phone */
+  .shot--narrow { max-width: min(430px, 100%); }
+  figcaption { margin-top: 11px; font-family: var(--sans); font-size: 14.5px;
+               color: var(--muted); line-height: 1.5; }
+  .panels { display: grid; grid-template-columns: repeat(auto-fit, minmax(258px, 1fr));
+            gap: 22px; margin-top: 28px; }
+  .panels figure { margin: 0; }
+
+  .pull { margin: 30px 0 0; padding: 20px 25px; border-left: 3px solid var(--accent);
+          background: color-mix(in srgb, var(--accent) 7%, transparent);
+          border-radius: 0 8px 8px 0; }
+  .pull p { margin: 0 0 9px; color: var(--ink); max-width: none; }
+  .pull p:last-of-type { margin: 0; }
+  .pull .who { font-family: var(--mono); font-size: 11px; letter-spacing: .12em;
+               text-transform: uppercase; color: var(--muted); display: block; margin-top: 9px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(238px, 1fr));
+          gap: 1px; margin-top: 28px; background: var(--rule);
+          border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
+  .cell { background: var(--paper); padding: 22px 20px; }
+  .cell p { font-size: 15px; margin: 0; color: var(--ink2); max-width: none;
+            line-height: 1.55; font-family: var(--sans); }
+
+  /* results tables: scroll inside their own box, never the page */
+  .tablewrap { margin-top: 26px; overflow-x: auto; border: 1px solid var(--rule);
+               border-radius: 10px; background: var(--card); }
+  table { border-collapse: collapse; width: 100%; min-width: 480px;
+          font-family: var(--sans); font-size: 15.5px; }
+  th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--rule); }
+  th { font-family: var(--mono); font-size: 11px; letter-spacing: .1em;
+       text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  td { color: var(--ink2); font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom: 0; }
+  .win td { color: var(--ink); font-weight: 700;
+            background: color-mix(in srgb, var(--accent) 8%, transparent); }
+
+  /* real terminal output, quoted verbatim */
+  .term { margin-top: 26px; background: #14141f; color: #e6e3da; border-radius: 10px;
+          padding: 18px 20px; overflow-x: auto; box-shadow: var(--shadow);
+          border: 1px solid #2a2a3a; }
+  .term pre { margin: 0; font-family: var(--mono); font-size: 13px; line-height: 1.62;
+              white-space: pre; }
+  .term .c { color: #9aa08f; }
+  .term .g { color: #7fd18f; }
+  .term .y { color: #E3BC5E; }
+
+  .specs { margin-top: 26px; border-top: 1px solid var(--rule); }
+  .spec { display: grid; grid-template-columns: 1fr; gap: 2px;
+          padding: 14px 0; border-bottom: 1px solid var(--rule); }
+  @media (min-width: 700px) { .spec { grid-template-columns: 178px 1fr; gap: 24px; } }
+  .spec dt { font-family: var(--mono); font-size: 11.5px; letter-spacing: .1em;
+             text-transform: uppercase; color: var(--muted); padding-top: 4px; }
+  .spec dd { margin: 0; font-size: 16px; color: var(--ink2); font-family: var(--sans); }
+
+  .close { padding: 6px 0 80px var(--spine); position: relative; }
+  .close h2 { max-width: 20ch; }
+  footer { border-top: 1px solid var(--rule); padding: 28px 0 60px;
+           font-family: var(--sans); font-size: 14.5px; color: var(--muted); }
+  footer a { color: var(--ink2); }
+  footer p { margin: 0 0 8px; }
+
+  @media (max-width: 640px) {
+    :root { --spine: 38px; }
+    .hero { padding: 36px 0 46px; }
+    .stop { padding-bottom: 58px; }
+    .plate { padding: 9px; }
+    .term { padding: 14px 14px; }
+    .term pre { font-size: 11.5px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .btn { transition: none; }
+  }
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <div class="logo"><span class="dot" aria-hidden="true"></span>World-Record Half-Lives</div>
+    <div class="tagline">~250 reigns, nine events, one survival model</div>
+  </header>
+
+  <section class="hero">
+    <p class="kicker">A record that still stands is not a missing data point.</p>
+    <h1>It is a runner who hasn't died yet.</h1>
+
+    <p class="hero-sub">
+      Every world record lives until the next one breaks it, and the records still
+      standing today are <strong>right-censored</strong> — exactly the structure
+      survival analysis was built for. From about <strong>250 record reigns</strong>
+      across nine events comes a Kaplan-Meier curve, a Cox model of what makes a
+      record fall sooner, and a five-year fall probability for each record standing
+      right now. Kratochvílová's 800 m, set in <strong>1983</strong>, comes out at
+      roughly zero.
+    </p>
+
+    <div class="cta-row">
+      <a class="btn btn-primary" href="../">Read the short version</a>
+      <a class="textlink" href="https://github.com/lyhjeremy/world-record-half-lives">or the code and data</a>
+    </div>
+
+    <div class="claims">
+      <div class="claim">
+        <div class="n">1.5 yr</div>
+        <p>Kaplan-Meier half-life. Most records are broken quickly; the danger is
+           heavily front-loaded.</p>
+      </div>
+      <div class="claim">
+        <div class="n">HR 0.52</div>
+        <p>for being a modern record. Set in 1980 or later and the hazard roughly
+           halves.</p>
+      </div>
+      <div class="claim">
+        <div class="n">HR 0.65</div>
+        <p>per unit of improvement that set the record. Beamon-style leaps buy
+           durability.</p>
+      </div>
+      <div class="claim">
+        <div class="n">60% → 0%</div>
+        <p>the range of five-year fall probabilities today, from the 2023 marathon
+           record down to the 42-year-old women's 800 m.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="wrap">
+<div class="route">
+
+  <section class="stop">
+    <p class="eyebrow">Start · the framing</p>
+    <h2>The obvious analysis is the wrong one</h2>
+    <p>
+      The tempting approach is to average how long past records lasted. It gives a
+      number, and the number is wrong, because it can only see records that have
+      already been broken. Every record still standing — which is to say every
+      record anyone actually cares about — is excluded by construction, and those
+      are precisely the long-lived ones.
+    </p>
+    <p>
+      Survival analysis exists for this. A record still standing is
+      <strong>censored</strong>: we know it has lasted at least this long and not
+      how much longer it will go. Kaplan-Meier uses that partial information
+      instead of discarding it.
+    </p>
+  </section>
+
+  <section class="stop stop--key">
+    <p class="eyebrow">↓ the curve</p>
+    <h2>Most records die young</h2>
+
+    <div class="bignum">1.5 yr</div>
+    <p class="bignum-note">median survival of a world record, across nine events.</p>
+
+    <p>
+      The hazard is <strong>front-loaded</strong>. A new record is at its most
+      vulnerable almost immediately, because the conditions and the athlete that
+      produced it are usually still around. Survive that window and the curve
+      flattens dramatically.
+    </p>
+    <p>
+      Which reframes the famous old records. They are not durable because
+      something special happened in 1983; they are durable because they cleared the
+      dangerous first years, and the survivors are the ones we remember.
+    </p>
+    <figure>
+      <div class="plate">
+        <img width="1200" height="750" src="../figures/record_survival.png" fetchpriority="high"
+          alt="Kaplan-Meier survival curve for world records, dropping steeply in the first two years then flattening into a long tail, with separate curves for pre-1980 and modern records." />
+      </div>
+      <figcaption>Kaplan-Meier survival. Steep early, flat late, and modern records above older ones.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop">
+    <p class="eyebrow">↓ what makes one last</p>
+    <h2>Two things predict durability</h2>
+    <p>
+      The Cox model finds both effects pointing the same way, and both are
+      intuitive once stated.
+    </p>
+    <p>
+      <strong>Modern records last longer.</strong> A record set in 1980 or later
+      carries a hazard ratio of about <strong>0.52</strong> — roughly half the risk
+      of falling in any given year. The sport got professional, the low-hanging
+      improvements were taken, and the frontier got harder to move.
+    </p>
+    <p>
+      <strong>Big leaps last longer.</strong> Each unit of improvement in the jump
+      that set a record carries a hazard ratio of about <strong>0.65</strong>. A
+      record that beat its predecessor by a wide margin has put clear air between
+      itself and the field, and that air takes years to close.
+    </p>
+    <figure>
+      <div class="plate">
+        <img width="1650" height="1125" src="../figures/progressions.png" loading="lazy"
+          alt="Record progression curves for the nine analysed events, each showing marks improving over time with fitted curves flattening in recent decades." />
+      </div>
+      <figcaption>The progressions the reigns were reconstructed from.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop">
+    <p class="eyebrow">↓ today</p>
+    <h2>Which record falls next</h2>
+    <p>
+      Turn the model on the records standing right now, conditioning on how long
+      each has already survived, and the five-year fall probabilities spread across
+      the entire range. The <strong>2023 marathon record</strong> sits near
+      <strong>60%</strong>, which fits an event mid-way through a shoe-driven
+      rewrite — a shift I decomposed separately in
+      <a href="https://lyhjeremy.github.io/marathon-shoe-revolution-decomposition/">the super-shoe study</a>.
+      The <strong>women's 800 m from 1983</strong> sits near zero.
+    </p>
+    <figure>
+      <div class="plate">
+        <img width="1275" height="750" src="../figures/vulnerability.png" loading="lazy"
+          alt="Ranked bar chart of the probability each current world record falls within five years, led by the 2023 marathon record near sixty percent and ending near zero for the 1983 women's 800 metres." />
+      </div>
+      <figcaption>Five-year fall probability for every current record in the set.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop stop--warn">
+    <p class="eyebrow">↓ the data problem, and what was done about it</p>
+    <h2>Nine events, because only nine verified clean</h2>
+    <p>
+      Progressions come from Wikipedia's record-progression pages, which mix the
+      actual chronological progression with all-time top lists and navigation
+      boxes. A naïve scrape silently truncates or contaminates an event's history,
+      and nothing about the output looks wrong when it does.
+    </p>
+    <p>
+      So the fetcher applies a hard completeness check: an event is kept only if
+      its <strong>reconstructed running-best equals the current ratified world
+      record</strong> and its history reaches far enough back. Nine events pass —
+      100 m, 800 m, 1500 m, 5000 m, 10,000 m, marathon and shot put for men, plus
+      the women's 800 m and high jump. Everything else is <strong>dropped rather
+      than analysed half-complete</strong>.
+    </p>
+    <p>
+      Two limits remain. The model sees when records fell but not the live
+      pressure on them, so it has no idea how many athletes are within 1% today —
+      the obvious next feature. And event "limits" from asymptotic curve fits are
+      left out of the headline entirely, because for still-improving events the
+      asymptote is not statistically identifiable and would be a confident-looking
+      guess.
+    </p>
+  </section>
+
+  <section class="stop stop--end">
+    <p class="eyebrow">Finish · how it was built</p>
+    <h2>Where the numbers come from</h2>
+    <dl class="specs">
+      <div class="spec"><dt>Data</dt><dd>Wikipedia world-record progression pages, read with <code>pandas.read_html</code></dd></div>
+      <div class="spec"><dt>Verification</dt><dd>An event is kept only if its reconstructed running-best matches the current ratified record</dd></div>
+      <div class="spec"><dt>Sample</dt><dd>~250 record reigns across nine verified-complete events</dd></div>
+      <div class="spec"><dt>Models</dt><dd>Kaplan-Meier for survival, Cox proportional hazards for covariates</dd></div>
+      <div class="spec"><dt>Censoring</dt><dd>Records still standing are right-censored, not dropped</dd></div>
+      <div class="spec"><dt>Built with</dt><dd>Python, pandas, lifelines, matplotlib</dd></div>
+      <div class="spec"><dt>Tables</dt><dd><code>record_reigns.csv</code>, <code>cox_summary.csv</code>, <code>current_record_vulnerability.csv</code></dd></div>
+    </dl>
+  </section>
+
+</div>
+</div>
+
+<div class="wrap">
+  <section class="close">
+    <h2>The old records are survivors, not miracles</h2>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="../">Read the short version</a>
+      <a class="textlink" href="https://github.com/lyhjeremy/world-record-half-lives">or the code and data</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>
+      World-Record Half-Lives ·
+      <a href="../">Story</a> ·
+      <a href="https://github.com/lyhjeremy/world-record-half-lives">Source</a> ·
+      MIT © 2026 Jeremy Lee
+    </p>
+    <p>Record data from Wikipedia progression pages.</p>
+  </footer>
+</div>
+</body>
+</html>
