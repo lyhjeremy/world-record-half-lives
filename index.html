@@ -3,13 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>World-Record Half-Lives — how long records stand</title>
+<title>World-Record Half-Lives: how long records stand</title>
 <meta name="description" content="A survival analysis of track & field world records: how long they stand, why modern records last longer, and which of today's records is most likely to fall next.">
 <style>
-  :root{ --paper:#FBF8F1; --ink:#1a1a2e; --wine:#7a1f2b; --gold:#D4A537; --mut:#6b6656; }
+@font-face{font-family:"Source Serif 4";src:url("fonts/SourceSerif4-400.woff2")format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Source Serif 4";src:url("fonts/SourceSerif4-600.woff2")format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:"IBM Plex Sans";src:url("fonts/IBMPlexSans-400.woff2")format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"IBM Plex Sans";src:url("fonts/IBMPlexSans-600.woff2")format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:"IBM Plex Mono";src:url("fonts/IBMPlexMono-400.woff2")format("woff2");font-weight:400;font-display:swap}
+
+  :root{ --paper:#EDEDE7; --ink:#1C1E1B; --wine:#2C5852; --gold:#8C3A1E; --mut:#6b6656; }
   *{box-sizing:border-box}
   body{margin:0;background:var(--paper);color:var(--ink);
-       font-family:Georgia,'Times New Roman',serif;line-height:1.65;}
+       font-family:"Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, serif;line-height:1.65;}
   .band{background:var(--ink);color:var(--paper);padding:0;}
   .band svg{display:block;width:100%;height:auto}
   .wrap{max-width:760px;margin:0 auto;padding:0 22px;}
@@ -20,55 +26,54 @@
   p{margin:.8em 0;}
   .lead{font-size:1.18rem;}
   figure{margin:1.6em 0;text-align:center;}
-  figure img{max-width:100%;height:auto;border:1px solid #e7e0d0;border-radius:6px;background:#fff;}
+  figure img{max-width:100%;height:auto;border:1px solid #e7e0d0;border-radius: 0;background:#F5F5F0;}
   figcaption{font-size:.92rem;color:var(--mut);margin-top:.5em;font-style:italic;}
   .stats{display:flex;flex-wrap:wrap;gap:14px;margin:1.4em 0;}
-  .stat{flex:1 1 150px;background:#fff;border:1px solid #e7e0d0;border-left:4px solid var(--gold);
-        border-radius:5px;padding:14px 16px;}
+  .stat{flex:1 1 150px;background:#F5F5F0;border:1px solid #e7e0d0;border-left:4px solid var(--gold);
+        border-radius: 0;padding:14px 16px;}
   .stat b{display:block;font-size:1.7rem;color:var(--wine);line-height:1.1;}
   .stat span{font-size:.9rem;color:var(--mut);}
   em.k{color:var(--wine);font-style:normal;font-weight:bold;}
   a{color:var(--wine);}
   footer{border-top:1px solid #e0d9c8;margin-top:3em;padding:22px 0 50px;color:var(--mut);font-size:.92rem;}
-  code{background:#efe9db;padding:.05em .35em;border-radius:3px;font-size:.9em;}
+  code{background:#efe9db;padding:.05em .35em;border-radius: 0;font-size:.9em;}
 </style>
 </head>
 <body>
-<a href="overview/" data-overview-link style="display:block;background:#1a1a2e;color:#FBF8F1;text-align:center;padding:11px 18px;font:600 14.5px/1.45 -apple-system,'Helvetica Neue',Arial,sans-serif;letter-spacing:.01em;text-decoration:none">Read the full writeup&nbsp;&rarr;</a>
+<a href="overview/" data-overview-link style="display:block;background:#1C1E1B;color:#EDEDE7;text-align:center;padding:11px 18px;font:600 14.5px/1.45 -apple-system,'Helvetica Neue',Arial,sans-serif;letter-spacing:.01em;text-decoration:none">Read the full writeup&nbsp;&rarr;</a>
 
 <div class="band">
   <svg viewBox="0 0 760 132" preserveAspectRatio="none" role="img" aria-label="decaying record progression">
     <polyline points="0,26 90,44 150,58 220,70 300,82 400,92 520,100 660,106 760,110"
-      fill="none" stroke="#D4A537" stroke-width="3"/>
+      fill="none" stroke="#8C3A1E" stroke-width="3"/>
     <line x1="0" y1="118" x2="760" y2="118" stroke="#3a3a55" stroke-width="1"/>
-    <circle cx="760" cy="110" r="4.5" fill="#D4A537"/>
+    <circle cx="760" cy="110" r="4.5" fill="#8C3A1E"/>
   </svg>
 </div>
 <header>
   <div class="wrap">
     <h1>World-Record Half-Lives</h1>
-    <p class="sub">How long does a world record stand — and which of today's is next to fall?</p>
+    <p class="sub">How long does a world record stand, and which of today's is next to fall?</p>
   </div>
 </header>
 
 <main class="wrap">
   <p class="lead">A world record has a lifespan. It is born the day it is set and dies the day
-  someone beats it — and the records standing today simply haven't died <em>yet</em>. That is
+  someone beats it, and the records standing today simply haven't died <em>yet</em>. That is
   exactly the shape of a <strong>survival analysis</strong>: durations, some of them still running.
-  So I turned a century of athletics into survival data — ~250 record "reigns" across nine events —
-  and let the model tell us how long records live, why that's changing, and which current records
+  So I turned a century of athletics into survival data, ~250 record "reigns" across nine events, and let the model tell us how long records live, why that's changing, and which current records
   look most exposed.</p>
 
   <div class="stats">
-    <div class="stat"><b>~1.5 yr</b><span>median record half-life — most records fall fast</span></div>
+    <div class="stat"><b>~1.5 yr</b><span>median record half-life. Most records fall fast</span></div>
     <div class="stat"><b>≈ 2×</b><span>longer that modern (post-1980) records survive</span></div>
     <div class="stat"><b>9</b><span>events, each verified complete against the real world record</span></div>
   </div>
 
-  <h2>Records fall fast — but far less than they used to</h2>
+  <h2>Records fall fast, but far less than they used to</h2>
   <p>The median record survives only about a year and a half: someone is usually right behind.
   But that number hides a heavy tail, and the tail is growing. Split the survival curve by era and
-  a record set since 1980 clearly outlives an older one — the modern game is harder to move. A
+  a record set since 1980 clearly outlives an older one. The modern game is harder to move. A
   proportional-hazards model agrees: being a modern record roughly <em class="k">halves</em> the
   chance of being broken, and records set by a <em class="k">big margin</em> last longer still.</p>
   <figure>
@@ -89,9 +94,9 @@
   <h2>So which record falls next?</h2>
   <p>Because a record's risk is highest early, the cleanest forecast comes straight from the survival
   curve: given that a record has <em>already</em> survived so many years, what's the chance it falls
-  in the next five? Fresh records score high — the <em class="k">2023 marathon</em> (~60%) in the
+  in the next five? Fresh records score high. The <em class="k">2023 marathon</em> (~60%) in the
   super-shoe era, the <em class="k">2024 women's high jump</em> (~59%). Old records have earned their
-  safety by surviving the dangerous years — and Kratochvílová's <em class="k">1983 women's 800 m</em>
+  safety by surviving the dangerous years, and Kratochvílová's <em class="k">1983 women's 800 m</em>
   comes out near <em class="k">zero</em>, the statistical picture of a record no one expects to fall.</p>
   <figure>
     <img src="figures/vulnerability.png" alt="Model probability each current record falls within five years">
@@ -100,7 +105,7 @@
 
   <h2>A note on the data</h2>
   <p>The progressions come from Wikipedia, but those pages bury the real record history among
-  top-lists and side tables — scrape carelessly and you get truncated or fictional records. Every
+  top-lists and side tables, scrape carelessly and you get truncated or fictional records. Every
   event here had to pass a hard test: its reconstructed best must equal the current ratified world
   record. Nine events passed; the rest were left out rather than shown half-true. The
   <a href="https://github.com/lyhjeremy/world-record-half-lives">code and full method</a> are on GitHub.</p>
