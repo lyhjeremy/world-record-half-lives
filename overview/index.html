@@ -3,55 +3,57 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>World-Record Half-Lives: survival analysis on 250 record reigns</title>
-<meta name="description" content="Treating every world record as a survival-time problem. Kaplan-Meier puts the half-life at about 1.5 years, Cox says modern records last twice as long, and today's records get a five-year fall probability." />
-<meta name="theme-color" content="#EDEDE7" />
-<meta property="og:title" content="World-Record Half-Lives" />
-<meta property="og:description" content="Records that are still standing are censored, not missing. Survival analysis on 250 reigns across nine events." />
+<title>World-record half-lives: survival analysis of 248 record reigns</title>
+<meta name="description" content="Each athletics world record treated as a survival time. Kaplan-Meier puts the median reign at 1.5 years, a Cox model finds records set since 1980 face about half the hazard, and each standing record gets a five-year fall probability." />
+<meta name="theme-color" content="#EFEBE5" />
+<meta property="og:title" content="World-record half-lives" />
+<meta property="og:description" content="Kaplan-Meier and Cox models on 248 world-record reigns across nine events, with a five-year fall probability for each record standing today." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://lyhjeremy.github.io/world-record-half-lives/overview/" />
+<link href="" rel="stylesheet" />
 <style>
-@font-face{font-family:"Source Serif 4";src:url("../fonts/SourceSerif4-400.woff2")format("woff2");font-weight:400;font-display:swap}
-@font-face{font-family:"Source Serif 4";src:url("../fonts/SourceSerif4-600.woff2")format("woff2");font-weight:600;font-display:swap}
-@font-face{font-family:"IBM Plex Sans";src:url("../fonts/IBMPlexSans-400.woff2")format("woff2");font-weight:400;font-display:swap}
-@font-face{font-family:"IBM Plex Sans";src:url("../fonts/IBMPlexSans-600.woff2")format("woff2");font-weight:600;font-display:swap}
-@font-face{font-family:"IBM Plex Mono";src:url("../fonts/IBMPlexMono-400.woff2")format("woff2");font-weight:400;font-display:swap}
-
   :root {
-    --paper: #EDEDE7;
-    --card: #F5F5F0;
-    --plate: #F5F5F0;
-    --ink: #1C1E1B;
-    --ink2: #3d3d55;
-    --muted: #52564E;
-    --rule: #C6C7BF;
-    --accent: #2C5852;
-    --accent2: #7A5A1E;
-    --link: #8C3A1E;
-    --serif: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
-    --sans: 'Source Sans 3', -apple-system, system-ui, sans-serif;
-    --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
-    --shadow: 0 1px 2px rgba(26,26,46,.05), 0 10px 34px rgba(26,26,46,.07);
+    --paper: #EFEBE5;
+    --card: #F6F3EE;
+    --plate: #F6F3EE;
+    --ink: #211B19;
+    --ink2: #58504B;
+    --muted: #58504B;
+    --rule: #CDC5BE;
+    --accent: #A0362B;
+    --accent2: #2F5E3E;
+    --link: #A0362B;
+    --serif: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+    --sans: "IBM Plex Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --mono: "IBM Plex Mono", "SF Mono", Menlo, Consolas, monospace;
+    --display: "Big Shoulders Display", "Arial Narrow", sans-serif;
+    --edge: #7C736C;
     --spine:  92px;
     --col:    min(100% - 2.6rem, 62rem);
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --paper: #14141f;
-      --card: #1c1c2a;
-      --plate: #f7f4ec;
-      --ink: #F2EFE6;
-      --ink2: #C9C4B6;
-      --muted: #918B7D;
-      --rule: #33313f;
-      --accent: #A78BFA;
-      --accent2: #E3BC5E;
-      --link: #22D3EE;
-      --shadow: 0 1px 2px rgba(0,0,0,.32), 0 10px 34px rgba(0,0,0,.4);
+      --paper: #1B1716;
+      --card: #25201E;
+      --plate: #25201E;
+      --ink: #ECE5DF;
+      --ink2: #AFA59D;
+      --muted: #AFA59D;
+      --rule: #3F3734;
+      --accent: #D88A7C;
+      --accent2: #7FB48E;
+      --link: #D88A7C;
+      --edge: #756A64;
     }
   }
 
-  * { box-sizing: border-box; }
+  @font-face{font-family:"Source Serif 4";src:url("../fonts/SourceSerif4-400.woff2")format("woff2");font-weight:400;font-display:swap}
+  @font-face{font-family:"Source Serif 4";src:url("../fonts/SourceSerif4-600.woff2")format("woff2");font-weight:600;font-display:swap}
+  @font-face{font-family:"IBM Plex Sans";src:url("../fonts/IBMPlexSans-400.woff2")format("woff2");font-weight:400;font-display:swap}
+  @font-face{font-family:"IBM Plex Sans";src:url("../fonts/IBMPlexSans-600.woff2")format("woff2");font-weight:600;font-display:swap}
+  @font-face{font-family:"IBM Plex Mono";src:url("../fonts/IBMPlexMono-400.woff2")format("woff2");font-weight:400;font-display:swap}
+
+  * { box-sizing: border-box; border-radius: 0; }
   html { scroll-behavior: smooth; }
   body {
     margin: 0; background: var(--paper); color: var(--ink);
@@ -210,55 +212,94 @@
     html { scroll-behavior: auto; }
     .btn { }
   }
+  @font-face{font-family:"Big Shoulders Display";src:url("../fonts/BigShouldersDisplay-700.woff2")format("woff2");font-weight:700;font-style:normal;font-display:swap}
+  @font-face{font-family:"Big Shoulders Display";src:url("../fonts/BigShouldersDisplay-800.woff2")format("woff2");font-weight:800;font-style:normal;font-display:swap}
 
+  .btn:hover { transform: none; background: var(--accent); border-color: var(--accent); color: var(--paper); }
+  .pull { border: 1px solid var(--edge); border-left: 1px solid var(--edge); background: transparent; }
+  .term { background: var(--card); color: var(--ink); border: 1px solid var(--rule); }
+  .term .c { color: var(--muted); } .term .g { color: var(--accent2); } .term .y { color: var(--accent); }
+  .logo, .hero h1, h2, .claim .n, .bignum { font-family: var(--display); }
+
+  /* Track: stadium scoreboard. Tall display numerals on an ink board, lane rules. */
+  .masthead { border-bottom: 1px solid var(--rule); padding-bottom: 18px; box-shadow: none; }
+  .masthead { border-bottom: 7px double var(--accent); }
+  .hero h1 { font-weight: 800; text-transform: uppercase; letter-spacing: .005em; line-height: .92;
+             font-size: clamp(50px, 9vw, 118px); max-width: 14ch; }
+  h2 { font-weight: 700; text-transform: uppercase; letter-spacing: .01em; font-size: clamp(30px, 4.4vw, 46px); line-height: 1; }
+  .claims { background: var(--ink); color: var(--paper); padding: 6px 26px 14px; gap: 0 40px; }
+  .claim, .claim:first-child, .claim:nth-child(2) { border-top: 1px solid color-mix(in srgb, var(--paper) 22%, transparent); }
+  .claim:first-child { border-top: 0; }
+  @media (min-width: 760px) { .claim:nth-child(2) { border-top: 0; } }
+  .claim .n { color: var(--paper); font-weight: 800; font-size: 60px; letter-spacing: .01em; }
+  .claim p { color: color-mix(in srgb, var(--paper) 78%, var(--ink)); }
+  .bignum { font-weight: 800; letter-spacing: 0; }
+  .route::before { width: 0; border-left: 1px solid var(--rule); box-shadow: none; }
+  .route { counter-reset: lane; }
+  .stop { counter-increment: lane; }
+  .stop::before { content: counter(lane); width: 30px; height: 30px; left: calc(var(--spine) / 2 - 15px); top: 2px;
+                  background: var(--paper); border: 2px solid var(--ink); font: 800 18px/26px var(--display);
+                  text-align: center; color: var(--ink); }
+  .stop--key::before { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+  .stop--end::before { background: var(--ink); color: var(--paper); }
+
+
+  .board { margin-top: 28px; background: var(--ink); color: var(--paper); padding: 8px 0 4px; overflow-x: auto; }
+  .board table { min-width: 520px; font-family: var(--sans); background: transparent; }
+  .board th { color: color-mix(in srgb, var(--paper) 70%, var(--ink)); border-bottom: 1px solid color-mix(in srgb, var(--paper) 30%, transparent); }
+  .board td { color: var(--paper); border-bottom: 1px solid color-mix(in srgb, var(--paper) 14%, transparent); padding: 9px 16px; }
+  .board tr:last-child td { border-bottom: 0; }
+  .board .lane { font: 800 22px/1 var(--display); width: 44px; text-align: center; color: color-mix(in srgb, var(--paper) 60%, var(--ink)); }
+  .board .mark { font: 700 24px/1 var(--display); letter-spacing: .02em; }
+  .board .p { font: 800 28px/1 var(--display); text-align: right; width: 70px; }
+  .board .bar { width: 34%; }
+  .board .bar span { display: block; height: 10px; background: var(--accent); }
+  .board .bar span.zero { width: 2px !important; background: color-mix(in srgb, var(--paper) 50%, transparent); }
+  .board-note { font-family: var(--sans); font-size: 14.5px; color: var(--muted); margin: 10px 0 0; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="masthead">
-    <div class="logo"><span class="dot" aria-hidden="true"></span>World-Record Half-Lives</div>
-    <div class="tagline">~250 reigns, nine events, one survival model</div>
+    <div class="logo"><span class="dot" aria-hidden="true"></span>World-record half-lives</div>
+    <div class="tagline">248 reigns, nine events, Kaplan-Meier and Cox</div>
   </header>
 
   <section class="hero">
-    <p class="kicker">A record that still stands is not a missing data point.</p>
-    <h1>It is a runner who hasn't died yet.</h1>
+    <p class="kicker">Survival analysis on athletics world records</p>
+    <h1>Half of all world records fall within 1.5 years</h1>
 
     <p class="hero-sub">
-      Every world record lives until the next one breaks it, and the records still
-      standing today are <strong>right-censored</strong>. Exactly the structure
-      survival analysis was built for. From about <strong>250 record reigns</strong>
-      across nine events comes a Kaplan-Meier curve, a Cox model of what makes a
-      record fall sooner, and a five-year fall probability for each record standing
-      right now. Kratochvílová's 800 m, set in <strong>1983</strong>, comes out at
-      roughly zero.
+      I treated each world record as a survival time: it starts the day it is set
+      and ends the day it is broken. The nine records still standing are
+      right-censored. On 248 reigns across nine events, a Kaplan-Meier curve gives
+      the median reign, a Cox proportional-hazards model says what makes a record
+      last, and the fitted curve gives each current record a probability of
+      falling in the next five years. The 2023 marathon record comes out at 60%.
+      Kratochvílová's 800 m from 1983 comes out at 0%.
     </p>
 
     <div class="cta-row">
       <a class="btn btn-primary" href="../">Read the short version</a>
-      <a class="textlink" href="https://github.com/lyhjeremy/world-record-half-lives">or the code and data</a>
+      <a class="textlink" href="https://github.com/lyhjeremy/world-record-half-lives">Code and data on GitHub</a>
     </div>
 
     <div class="claims">
       <div class="claim">
         <div class="n">1.5 yr</div>
-        <p>Kaplan-Meier half-life. Most records are broken quickly; the danger is
-           heavily front-loaded.</p>
+        <p>Kaplan-Meier median reign across all 248 records. Most of the risk comes in the first two years.</p>
       </div>
       <div class="claim">
         <div class="n">HR 0.52</div>
-        <p>for being a modern record. Set in 1980 or later and the hazard roughly
-           halves.</p>
+        <p>Cox hazard ratio for a record set in 1980 or later (p &lt; 0.001). Modern records fall at about half the rate.</p>
       </div>
       <div class="claim">
         <div class="n">HR 0.65</div>
-        <p>per unit of improvement that set the record. Beamon-style leaps buy
-           durability.</p>
+        <p>per percentage point by which a record beat the one before it (p = 0.0002). Big jumps last longer.</p>
       </div>
       <div class="claim">
-        <div class="n">60% → 0%</div>
-        <p>the range of five-year fall probabilities today, from the 2023 marathon
-           record down to the 42-year-old women's 800 m.</p>
+        <div class="n">60% to 0%</div>
+        <p>Range of five-year fall probabilities for the nine standing records, from the 2023 marathon to the 1983 women's 800 m.</p>
       </div>
     </div>
   </section>
@@ -268,136 +309,176 @@
 <div class="route">
 
   <section class="stop">
-    <p class="eyebrow">Start · the framing</p>
-    <h2>The obvious analysis is the wrong one</h2>
+    <p class="eyebrow">The framing</p>
+    <h2>Why an average reign gives the wrong answer</h2>
     <p>
-      The tempting approach is to average how long past records lasted. It gives a
-      number, and the number is wrong, because it can only see records that have
-      already been broken. Every record still standing, which is to say every
-      record anyone actually cares about, is excluded by construction, and those
-      are precisely the long-lived ones.
+      The quick approach is to average how long past records lasted. That average
+      only sees records that have already been broken, so it leaves out every
+      record still standing, and those are the long-lived ones. The estimate comes
+      out too short by construction.
     </p>
     <p>
-      Survival analysis exists for this. A record still standing is
-      <strong>censored</strong>: we know it has lasted at least this long and not
-      how much longer it will go. Kaplan-Meier uses that partial information
-      instead of discarding it.
+      Survival analysis handles this with censoring. A standing record has lasted
+      at least <em>t</em> years and we don't know how much longer it will go.
+      Kaplan-Meier keeps that partial information in the risk set instead of
+      throwing the record away. Of the 248 reigns here, 239 ended in a new record
+      and 9 are censored.
     </p>
   </section>
 
   <section class="stop stop--key">
-    <p class="eyebrow">↓ the curve</p>
-    <h2>Most records die young</h2>
+    <p class="eyebrow">The curve</p>
+    <h2>Most records fall early</h2>
 
     <div class="bignum">1.5 yr</div>
-    <p class="bignum-note">median survival of a world record, across nine events.</p>
+    <p class="bignum-note">Kaplan-Meier median survival of a world record, nine events, 1896 to 2026.</p>
 
     <p>
-      The hazard is <strong>front-loaded</strong>. A new record is at its most
-      vulnerable almost immediately, because the conditions and the athlete that
-      produced it are usually still around. Survive that window and the curve
-      flattens dramatically.
+      The hazard is front-loaded. A new record is most exposed right after it is
+      set, often because the athlete who set it, and the rivals chasing it, are
+      still competing. Records that get through the first few years flatten out
+      into a long tail.
     </p>
     <p>
-      Which reframes the famous old records. They are not durable because
-      something special happened in 1983; they are durable because they cleared the
-      dangerous first years, and the survivors are the ones we remember.
+      Split by era, the median reign is about 1.2 years for the 170 records set
+      before 1980 and about 2.0 years for the 78 set in 1980 or later. The famous
+      old records are the survivors of that early window, which is why they look
+      so durable now.
     </p>
     <figure>
       <div class="plate">
         <img width="1200" height="750" src="../figures/record_survival.png" fetchpriority="high"
-          alt="Kaplan-Meier survival curve for world records, dropping steeply in the first two years then flattening into a long tail, with separate curves for pre-1980 and modern records." />
+          alt="Kaplan-Meier survival curves for world records set before 1980 (n=170) and from 1980 on (n=78). Both drop below one half within about two years; the post-1980 curve sits above the older one for most of the range." />
       </div>
-      <figcaption>Kaplan-Meier survival. Steep early, flat late, and modern records above older ones.</figcaption>
+      <figcaption>Kaplan-Meier survival by era, with 95% confidence bands. The dotted line marks 50%.</figcaption>
     </figure>
   </section>
 
   <section class="stop">
-    <p class="eyebrow">↓ what makes one last</p>
-    <h2>Two things predict durability</h2>
+    <p class="eyebrow">Cox model</p>
+    <h2>Two things predict a long reign</h2>
     <p>
-      The Cox model finds both effects pointing the same way, and both are
-      intuitive once stated.
+      The Cox proportional-hazards model was fit on the 239 reigns that have a
+      previous record to compare against (the first record in each event has no
+      improvement margin). Hazard ratios below 1 mean a record falls more slowly.
     </p>
-    <p>
-      <strong>Modern records last longer.</strong> A record set in 1980 or later
-      carries a hazard ratio of about <strong>0.52</strong>, roughly half the risk
-      of falling in any given year. The sport got professional, the low-hanging
-      improvements were taken, and the frontier got harder to move.
-    </p>
-    <p>
-      <strong>Big leaps last longer.</strong> Each unit of improvement in the jump
-      that set a record carries a hazard ratio of about <strong>0.65</strong>. A
-      record that beat its predecessor by a wide margin has put clear air between
-      itself and the field, and that air takes years to close.
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Covariate</th><th>Hazard ratio</th><th>p</th><th>Reading</th></tr></thead>
+        <tbody>
+          <tr class="win"><td>Set in 1980 or later</td><td>0.52</td><td>&lt; 0.001</td><td>About half the yearly risk of being broken</td></tr>
+          <tr class="win"><td>Improvement over previous record (per % point)</td><td>0.65</td><td>0.0002</td><td>A 2% jump cuts the hazard to about 0.42</td></tr>
+          <tr><td>Distance event</td><td>0.78</td><td>0.07</td><td>Weaker, and not significant at 5%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:22px">
+      The era effect fits what happened to the sport after 1980: it turned
+      professional, the easy gains were taken, and each new mark got harder to
+      beat. The margin effect is the Beamon case. A record that beats its
+      predecessor by a wide gap leaves the rest of the field further behind.
     </p>
     <figure>
       <div class="plate">
         <img width="1650" height="1125" src="../figures/progressions.png" loading="lazy"
-          alt="Record progression curves for the nine analysed events, each showing marks improving over time with fitted curves flattening in recent decades." />
+          alt="Record progression curves for the analysed events, each improving over time in smaller and smaller steps, with fitted deceleration curves that flatten in recent decades." />
       </div>
-      <figcaption>The progressions the reigns were reconstructed from.</figcaption>
+      <figcaption>The progressions the reigns were reconstructed from, with fitted deceleration curves.</figcaption>
     </figure>
   </section>
 
   <section class="stop">
-    <p class="eyebrow">↓ today</p>
+    <p class="eyebrow">Today</p>
     <h2>Which record falls next</h2>
     <p>
-      Turn the model on the records standing right now, conditioning on how long
-      each has already survived, and the five-year fall probabilities spread across
-      the entire range. The <strong>2023 marathon record</strong> sits near
-      <strong>60%</strong>, which fits an event mid-way through a shoe-driven
-      rewrite. A shift I decomposed separately in
+      For a record that has already stood <em>t</em> years, the chance it falls in
+      the next five is 1 &minus; S(t+5) / S(t), read off the Kaplan-Meier curve.
+      Young records sit on the steep part of the curve. Old records have already
+      passed it. Ages are as of the July 2026 run.
+    </p>
+    <div class="board" role="region" aria-label="Five-year fall probability for each standing record" tabindex="0">
+      <table>
+        <thead><tr><th>Lane</th><th>Event</th><th>Record</th><th>Set</th><th>Fall in 5 yr</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="lane">1</td><td>Marathon</td><td class="mark">2:00:35</td><td>2023</td><td class="bar"><span style="width:60%"></span></td><td class="p">60%</td></tr>
+          <tr><td class="lane">2</td><td>High jump (W)</td><td class="mark">2.10 m</td><td>2024</td><td class="bar"><span style="width:59%"></span></td><td class="p">59%</td></tr>
+          <tr><td class="lane">3</td><td>Shot put</td><td class="mark">23.56 m</td><td>2023</td><td class="bar"><span style="width:57%"></span></td><td class="p">57%</td></tr>
+          <tr><td class="lane">4</td><td>10,000 m</td><td class="mark">26:11.00</td><td>2020</td><td class="bar"><span style="width:52%"></span></td><td class="p">52%</td></tr>
+          <tr><td class="lane">5</td><td>5000 m</td><td class="mark">12:35.36</td><td>2020</td><td class="bar"><span style="width:51%"></span></td><td class="p">51%</td></tr>
+          <tr><td class="lane">6</td><td>800 m</td><td class="mark">1:40.91</td><td>2012</td><td class="bar"><span style="width:44%"></span></td><td class="p">44%</td></tr>
+          <tr><td class="lane">7</td><td>100 m</td><td class="mark">9.58 s</td><td>2009</td><td class="bar"><span style="width:37%"></span></td><td class="p">37%</td></tr>
+          <tr><td class="lane">8</td><td>1500 m</td><td class="mark">3:26.00</td><td>1998</td><td class="bar"><span style="width:25%"></span></td><td class="p">25%</td></tr>
+          <tr><td class="lane">9</td><td>800 m (W)</td><td class="mark">1:53.28</td><td>1983</td><td class="bar"><span class="zero"></span></td><td class="p">0%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="board-note">From <code>tables/current_record_vulnerability.csv</code>. Men's events unless marked (W).</p>
+    <p style="margin-top:22px">
+      The marathon record sits mid-way through a shoe-driven run of new marks,
+      which I decomposed separately in
       <a href="https://lyhjeremy.github.io/marathon-shoe-revolution-decomposition/">the super-shoe study</a>.
-      The <strong>women's 800 m from 1983</strong> sits near zero.
     </p>
     <figure>
       <div class="plate">
         <img width="1275" height="750" src="../figures/vulnerability.png" loading="lazy"
-          alt="Ranked bar chart of the probability each current world record falls within five years, led by the 2023 marathon record near sixty percent and ending near zero for the 1983 women's 800 metres." />
+          alt="Ranked bar chart of the probability each current world record falls within five years, from about 60 percent for the 2023 marathon record down to zero for the 1983 women's 800 metres." />
       </div>
-      <figcaption>Five-year fall probability for every current record in the set.</figcaption>
+      <figcaption>The same ranking as drawn by <code>analyze.py</code>.</figcaption>
     </figure>
   </section>
 
+  <section class="stop">
+    <p class="eyebrow">The data</p>
+    <h2>Nine events passed the completeness gate</h2>
+    <p>
+      Progressions come from Wikipedia's record-progression pages via
+      <code>pandas.read_html</code>. Those pages mix the real progression with
+      all-time lists and navigation tables, and a naive scrape can stop an event's
+      history decades early without any visible error.
+    </p>
+    <p>
+      So <code>fetch_data.py</code> keeps an event only if three things hold: its
+      reconstructed running best is within 0.5% of the current ratified record,
+      its history reaches back to 1970 or earlier, and it has at least 12 marks.
+      Nine of the 21 candidate events pass: the men's 100 m, 800 m, 1500 m,
+      5000 m, 10,000 m, marathon and shot put, and the women's 800 m and high
+      jump. The rest were dropped.
+    </p>
+  </section>
+
   <section class="stop stop--warn">
-    <p class="eyebrow">↓ the data problem, and what was done about it</p>
-    <h2>Nine events, because only nine verified clean</h2>
+    <p class="eyebrow">Limitations</p>
+    <h2>What this doesn't show</h2>
     <p>
-      Progressions come from Wikipedia's record-progression pages, which mix the
-      actual chronological progression with all-time top lists and navigation
-      boxes. A naïve scrape silently truncates or contaminates an event's history,
-      and nothing about the output looks wrong when it does.
+      The model knows when records fell. It doesn't know the current pressure on
+      them, such as how many athletes are within 1% this season, which would be the
+      next feature to add.
     </p>
     <p>
-      So the fetcher applies a hard completeness check: an event is kept only if
-      its <strong>reconstructed running-best equals the current ratified world
-      record</strong> and its history reaches far enough back. Nine events pass:
-      100 m, 800 m, 1500 m, 5000 m, 10,000 m, marathon and shot put for men, plus
-      the women's 800 m and high jump. Everything else is <strong>dropped rather
-      than analysed half-complete</strong>.
+      The 0% for the women's 800 m is partly mechanical. No reign in the data ends
+      between 43 and 48 years, so the curve is flat over that stretch and the
+      formula returns zero. The same event also contributes only three reigns,
+      one of them running 55 years from 1925 to 1980. That looks like missing rows
+      the gate can't catch, since it checks the end point and the start year,
+      not the gaps in between.
     </p>
     <p>
-      Two limits remain. The model sees when records fell but not the live
-      pressure on them, so it has no idea how many athletes are within 1% today.
-      The obvious next feature. And event "limits" from asymptotic curve fits are
-      left out of the headline entirely, because for still-improving events the
-      asymptote is not statistically identifiable and would be a confident-looking
-      guess.
+      The fitted progression curves are not used to estimate event limits. For
+      events that are still improving, the asymptote isn't identifiable from the
+      data, so the vulnerability ranking relies on the survival curve alone.
     </p>
   </section>
 
   <section class="stop stop--end">
-    <p class="eyebrow">Finish · how it was built</p>
+    <p class="eyebrow">How it was built</p>
     <h2>Where the numbers come from</h2>
     <dl class="specs">
       <div class="spec"><dt>Data</dt><dd>Wikipedia world-record progression pages, read with <code>pandas.read_html</code></dd></div>
-      <div class="spec"><dt>Verification</dt><dd>An event is kept only if its reconstructed running-best matches the current ratified record</dd></div>
-      <div class="spec"><dt>Sample</dt><dd>~250 record reigns across nine verified-complete events</dd></div>
-      <div class="spec"><dt>Models</dt><dd>Kaplan-Meier for survival, Cox proportional hazards for covariates</dd></div>
-      <div class="spec"><dt>Censoring</dt><dd>Records still standing are right-censored, not dropped</dd></div>
-      <div class="spec"><dt>Built with</dt><dd>Python, pandas, lifelines, matplotlib</dd></div>
+      <div class="spec"><dt>Gate</dt><dd>Running best within 0.5% of the ratified record, history to 1970 or earlier, at least 12 marks</dd></div>
+      <div class="spec"><dt>Sample</dt><dd>248 reigns (239 broken, 9 standing) across nine events, first record 1896</dd></div>
+      <div class="spec"><dt>Models</dt><dd>Kaplan-Meier survival; Cox proportional hazards on era, improvement margin and event type</dd></div>
+      <div class="spec"><dt>Forecast</dt><dd>Conditional five-year fall probability, 1 &minus; S(t+5) / S(t)</dd></div>
+      <div class="spec"><dt>Built with</dt><dd>Python, pandas, lifelines, SciPy, matplotlib</dd></div>
       <div class="spec"><dt>Tables</dt><dd><code>record_reigns.csv</code>, <code>cox_summary.csv</code>, <code>current_record_vulnerability.csv</code></dd></div>
     </dl>
   </section>
@@ -407,17 +488,17 @@
 
 <div class="wrap">
   <section class="close">
-    <h2>The old records are survivors, not miracles</h2>
+    <h2>The old records are the ones that got through the first two years</h2>
     <div class="cta-row">
       <a class="btn btn-primary" href="../">Read the short version</a>
-      <a class="textlink" href="https://github.com/lyhjeremy/world-record-half-lives">or the code and data</a>
+      <a class="textlink" href="https://github.com/lyhjeremy/world-record-half-lives">Code and data on GitHub</a>
     </div>
   </section>
 
   <footer>
     <p>
-      World-Record Half-Lives ·
-      <a href="../">Story</a> ·
+      World-record half-lives ·
+      <a href="../">Short version</a> ·
       <a href="https://github.com/lyhjeremy/world-record-half-lives">Source</a> ·
       MIT © 2026 Jeremy Lee
     </p>
