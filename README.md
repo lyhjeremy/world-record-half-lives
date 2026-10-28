@@ -38,7 +38,7 @@ Each world record is a duration: it starts when it is set and ends when it is br
 
 ## Stack
 
-Python, pandas, lxml, NumPy, SciPy, lifelines, matplotlib. The site is static HTML on GitHub Pages.
+Python, pandas, lxml, NumPy, SciPy, lifelines, matplotlib. The site is static HTML on GitHub Pages. The write-up's survival curve and progression panels are plain SVG drawn in the browser from `tables/record_reigns.csv`; the curve there reproduces the lifelines medians and five-year probabilities to the percent.
 
 ## How to run
 
@@ -58,7 +58,7 @@ Reign lengths for standing records, and so the five-year probabilities, depend o
 | `analyze.py` | Reigns, Kaplan-Meier, Cox, progression fits, figures and tables |
 | `figures/` | Survival curves, progression fits, vulnerability ranking |
 | `tables/` | `record_reigns.csv`, `cox_summary.csv`, `current_record_vulnerability.csv` |
-| `index.html`, `overview/` | The two pages of the site |
+| `index.html`, `overview/` | The two pages of the site; the write-up has an interactive survival curve |
 | `writeup.md` | Long-form notes |
 
 ## Limitations
