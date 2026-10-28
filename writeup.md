@@ -4,17 +4,19 @@
 
 ## Records as survival times
 
+I've run 14 marathons, so the result I looked for first was the marathon's: the men's record of 2:00:35, set in 2023, has the highest chance of any record here of falling within five years (60%). Getting to that number takes a different way of looking at records.
+
 A world record has a lifespan. It starts the day it is set and ends the day someone beats it. The records standing now haven't ended yet, which makes them censored observations: we know they have lasted at least this long, and nothing more. Survival analysis was built for exactly this kind of data.
 
-For nine events I reconstructed the ratified progression, measured every record's reign (years until the next record broke it), and marked the nine current records as censored. That gives 248 reigns, 239 of them ended. Kaplan-Meier estimates the survival curve, a Cox proportional-hazards model tests what shortens a reign, and the curve is then applied to today's records to rank how exposed each one is.
+For nine events I reconstructed the ratified progression, measured every record's reign (years until the next record broke it), and marked the nine current records as censored, which gives 248 reigns, 239 of them ended. Kaplan-Meier estimates the survival curve, a Cox proportional-hazards model tests what shortens a reign, and the curve is then applied to today's records to rank how exposed each one is.
 
 ## Getting the data right
 
-The progressions are on Wikipedia, and `pandas.read_html` reads them in seconds. The catch is that each page also carries all-time lists, by-nation tables and navigation boxes, and for several events the modern progression sits in a table a generic scraper won't reliably find. A naive scrape can give a women's 100 m history that stops in 1973, or count a sub-2:00 marathon that was never ratified.
+The progressions are on Wikipedia, and `pandas.read_html` reads them in seconds. The catch is that each page also carries all-time lists, by-nation tables and navigation boxes, and for several events the modern progression sits in a table a generic scraper won't reliably find; a naive scrape can give a women's 100 m history that stops in 1973, or count a sub-2:00 marathon that was never ratified.
 
-So the fetcher has a completeness gate. It rebuilds each event's running best from the scraped marks and keeps the event only if that best is within 0.5% of the current ratified record, the history reaches back to 1970 or earlier, and there are at least 12 marks. Nine of the 21 candidate events passed: the men's 100 m, 800 m, 1500 m, 5000 m, 10,000 m, marathon and shot put, and the women's 800 m and high jump. The rest were dropped.
+The fetcher therefore has a completeness gate. It rebuilds each event's running best from the scraped marks and keeps the event only if that best is within 0.5% of the current ratified record, the history reaches back to 1970 or earlier, and there are at least 12 marks. Nine of the 21 candidate events passed: the men's 100 m, 800 m, 1500 m, 5000 m, 10,000 m, marathon and shot put, and the women's 800 m and high jump. The rest were dropped.
 
-The gate has a blind spot. It checks the end point and the start year, not the gaps between them. The women's 800 m passed with only three reigns, one of them running 55 years from 1925 to 1980, which almost certainly means rows are missing.
+The gate has a blind spot: it checks the end point and the start year and never looks at the gaps between them. The women's 800 m passed with only three reigns, one of them running 55 years from 1925 to 1980, which almost certainly means rows are missing.
 
 ## What the survival curve says
 
@@ -31,15 +33,15 @@ The model's other clear result is about margins. Each percentage point by which 
 ## Progressions flatten
 
 <p align="center">
-  <img src="figures/progressions.png" alt="Record progression curves for the analysed events, improving over time in smaller and smaller steps, with fitted deceleration curves." width="760">
+  <img src="figures/progressions.png" alt="Record progression curves for the analyzed events, improving over time in smaller and smaller steps, with fitted deceleration curves." width="760">
 </p>
 
-Every progression decelerates: each new record takes off less than the one before. That shape is real and can be fitted. The limit itself is another matter. For events still dropping fast, the asymptote runs off to wherever the optimizer lets it, so I don't report a number. Where a progression has plainly levelled off, as with the women's 800 m and the women's high jump near 2.10 m, the plot shows it without a fit.
+Every progression decelerates, with each new record taking off less than the one before, and that shape is consistent enough to fit. The limit itself is another matter. For events still dropping fast, the asymptote runs off to wherever the optimizer lets it, so I don't report a number. Where a progression has plainly leveled off, as with the women's 800 m and the women's high jump near 2.10 m, the plot shows it without a fit.
 
 ## Which records fall next?
 
 <p align="center">
-  <img src="figures/vulnerability.png" alt="Ranked bar chart of the five-year fall probability for each standing world record, from about 60 percent for the 2023 marathon down to zero for the 1983 women's 800 metres." width="720">
+  <img src="figures/vulnerability.png" alt="Ranked bar chart of the five-year fall probability for each standing world record, from about 60 percent for the 2023 marathon down to zero for the 1983 women's 800 meters." width="720">
 </p>
 
 Because the risk is concentrated early, the simplest forecast comes straight from the survival curve. For a record that has already stood *t* years, the chance it falls in the next five is 1 − S(t+5)/S(t). Recent records sit on the steep part of the curve and score high: the 2023 marathon (60%), the 2024 women's high jump (59%) and the 2023 shot put (57%). Older records have already passed the steep part. The 1983 women's 800 m scores 0%.
@@ -50,6 +52,6 @@ These numbers use record ages as of the July 2026 run. Rerunning `analyze.py` la
 
 ## What's missing
 
-The model knows when records fell. It doesn't know the pressure on them now, such as how many athletes are within 1% of a record this season. That would be the next feature, and it would sharpen the five-year numbers. The nine-event scope is a deliberate trade: I'd rather model nine histories that pass a check than twenty that might be truncated, though the women's 800 m shows the check is not airtight.
+The model knows when records fell. It doesn't know the pressure on them now, such as how many athletes are within 1% of a record this season. That would be the next feature, and it would sharpen the five-year numbers. The nine-event scope is a deliberate trade, nine histories that pass a check in place of twenty that might be truncated, though the women's 800 m shows the check has holes.
 
 *Code: [github.com/lyhjeremy/world-record-half-lives](https://github.com/lyhjeremy/world-record-half-lives)*

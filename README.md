@@ -33,7 +33,7 @@ Each world record is a duration: it starts when it is set and ends when it is br
 6. An asymptotic curve is fitted to each progression with SciPy for the progression figure. Event limits from those fits are not reported (see limitations).
 
 <p align="center">
-  <img src="figures/vulnerability.png" alt="Ranked bar chart of the five-year fall probability for each standing world record, from about 60 percent for the 2023 marathon down to zero for the 1983 women's 800 metres." width="720">
+  <img src="figures/vulnerability.png" alt="Ranked bar chart of the five-year fall probability for each standing world record, from about 60 percent for the 2023 marathon down to zero for the 1983 women's 800 meters." width="720">
 </p>
 
 ## Stack
@@ -63,7 +63,7 @@ Reign lengths for standing records, and so the five-year probabilities, depend o
 
 ## Limitations
 
-- The model sees when records fell, not the current pressure on them (for example, how many athletes are within 1% this season).
+- The model sees when records fell. It has no measure of the current pressure on them, such as how many athletes are within 1% this season.
 - The 0% for the women's 800 m is partly mechanical. No reign in the data ends between 43 and 48 years, so the curve is flat over that stretch.
 - The women's 800 m contributes only three reigns, one of them 55 years long (1925 to 1980). That points to missing rows; the gate checks the final mark and start year, not gaps in between.
 - Asymptotic event limits are left out because for events still improving the asymptote is not identifiable from the data.

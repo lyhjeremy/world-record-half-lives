@@ -320,8 +320,8 @@
     <p>
       Survival analysis handles this with censoring. A standing record has lasted
       at least <em>t</em> years and we don't know how much longer it will go.
-      Kaplan-Meier keeps that partial information in the risk set instead of
-      throwing the record away. Of the 248 reigns here, 239 ended in a new record
+      Kaplan-Meier keeps that partial information in the risk set, so the record
+      still counts for every year it has survived. Of the 248 reigns here, 239 ended in a new record
       and 9 are censored.
     </p>
   </section>
@@ -381,7 +381,7 @@
     <figure>
       <div class="plate">
         <img width="1650" height="1125" src="../figures/progressions.png" loading="lazy"
-          alt="Record progression curves for the analysed events, each improving over time in smaller and smaller steps, with fitted deceleration curves that flatten in recent decades." />
+          alt="Record progression curves for the analyzed events, each improving over time in smaller and smaller steps, with fitted deceleration curves that flatten in recent decades." />
       </div>
       <figcaption>The progressions the reigns were reconstructed from, with fitted deceleration curves.</figcaption>
     </figure>
@@ -421,7 +421,7 @@
     <figure>
       <div class="plate">
         <img width="1275" height="750" src="../figures/vulnerability.png" loading="lazy"
-          alt="Ranked bar chart of the probability each current world record falls within five years, from about 60 percent for the 2023 marathon record down to zero for the 1983 women's 800 metres." />
+          alt="Ranked bar chart of the probability each current world record falls within five years, from about 60 percent for the 2023 marathon record down to zero for the 1983 women's 800 meters." />
       </div>
       <figcaption>The same ranking as drawn by <code>analyze.py</code>.</figcaption>
     </figure>
@@ -432,7 +432,7 @@
     <h2>Nine events passed the completeness gate</h2>
     <p>
       Progressions come from Wikipedia's record-progression pages via
-      <code>pandas.read_html</code>. Those pages mix the real progression with
+      <code>pandas.read_html</code>. Those pages mix the progression itself with
       all-time lists and navigation tables, and a naive scrape can stop an event's
       history decades early without any visible error.
     </p>
