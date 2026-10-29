@@ -3,14 +3,13 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>World-record half-lives: survival analysis of 248 record reigns</title>
-<meta name="description" content="Each athletics world record treated as a survival time. Kaplan-Meier puts the median reign at 1.5 years, a Cox model finds records set since 1980 face about half the hazard, and each standing record gets a five-year fall probability." />
+<title>World-record half-lives: which records fall before LA 2028</title>
+<meta name="description" content="Every ratified world record in 46 Olympic athletics events, rebuilt from World Athletics' own progression lists and modeled as survival times. Backtested from 2010, with a watchlist of each record's chance of falling before the LA 2028 Olympics close." />
 <meta name="theme-color" content="#EFEBE5" />
-<meta property="og:title" content="World-record half-lives" />
-<meta property="og:description" content="Kaplan-Meier and Cox models on 248 world-record reigns across nine events, with a five-year fall probability for each record standing today." />
+<meta property="og:title" content="World-record half-lives: which records fall before LA 2028" />
+<meta property="og:description" content="1,251 world-record reigns in 46 events, a Weibull survival model with per-event frailty, a 2010 backtest scored on 2011 to 2025, and a watchlist for LA 2028." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://lyhjeremy.github.io/world-record-half-lives/overview/" />
-<link href="" rel="stylesheet" />
 <style>
   :root {
     --paper: #EFEBE5;
@@ -243,114 +242,124 @@
   .stop--key::before { background: var(--accent); border-color: var(--accent); color: var(--paper); }
   .stop--end::before { background: var(--ink); color: var(--paper); }
 
-
-  .board { margin-top: 28px; background: var(--ink); color: var(--paper); padding: 8px 0 4px; overflow-x: auto; }
-  .board table { min-width: 520px; font-family: var(--sans); background: transparent; }
-  .board th { color: color-mix(in srgb, var(--paper) 70%, var(--ink)); border-bottom: 1px solid color-mix(in srgb, var(--paper) 30%, transparent); }
-  .board td { color: var(--paper); border-bottom: 1px solid color-mix(in srgb, var(--paper) 14%, transparent); padding: 9px 16px; }
-  .board tr:last-child td { border-bottom: 0; }
-  .board .lane { font: 800 22px/1 var(--display); width: 44px; text-align: center; color: color-mix(in srgb, var(--paper) 60%, var(--ink)); }
-  .board .mark { font: 700 24px/1 var(--display); letter-spacing: .02em; }
-  .board .p { font: 800 28px/1 var(--display); text-align: right; width: 70px; }
-  .board .bar { width: 34%; }
-  .board .bar span { display: block; height: 10px; background: var(--accent); }
-  .board .bar span.zero { width: 2px !important; background: color-mix(in srgb, var(--paper) 50%, transparent); }
-  .board-note { font-family: var(--sans); font-size: 14.5px; color: var(--muted); margin: 10px 0 0; }
 </style>
 </head>
 <body>
 <style>
-  /* page-specific: interactive survival curve and progression small multiples */
-  .ctl { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin: 18px 0 10px;
-         font-family: var(--sans); font-size: 15px; color: var(--ink2); }
-  .seg { display: inline-flex; border: 1px solid var(--edge); }
-  .seg button { font: 600 13px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase;
-                padding: 9px 13px; background: var(--card); color: var(--ink); border: 0; cursor: pointer; }
-  .seg button + button { border-left: 1px solid var(--edge); }
-  .seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
-  .seg button:hover { background: var(--accent); color: var(--paper); }
-  .age { display: flex; align-items: center; gap: 12px; flex: 1 1 260px; }
-  .age label { font: 600 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
-  .age input { flex: 1; min-width: 0; accent-color: var(--accent); }
-  .age output { font: 800 26px/1 var(--display); min-width: 4.2ch; text-align: right; color: var(--ink); }
-  .chart { width: 100%; touch-action: pan-y; }
+  /* page-specific: watchlist, reliability chart, survival by group */
+  .skeleton { background: color-mix(in srgb, var(--ink) 9%, var(--card)); border: 1px solid var(--rule); }
+  .sk-table { height: 520px; } .sk-chart { height: 340px; } .sk-small { height: 160px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .skeleton { animation: skpulse 1.3s ease-in-out infinite alternate; }
+    @keyframes skpulse { from { opacity: .55; } to { opacity: 1; } }
+  }
+  .seg { display: flex; flex-wrap: wrap; margin: 16px 0 12px; }
+  .seg button { font: 600 13px/1.2 var(--mono); padding: 8px 11px; border: 1px solid var(--edge); background: var(--card);
+                color: var(--ink); cursor: pointer; margin: 0 -1px -1px 0; }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .seg button:hover { background: var(--accent); color: var(--paper); border-color: var(--accent); }
+  .wl { border: 2px solid var(--ink); background: var(--card); overflow-x: auto; margin-top: 6px; }
+  .wl table { min-width: 760px; font-family: var(--sans); font-size: 14.5px; margin: 0; }
+  .wl th { padding: 0; vertical-align: bottom; }
+  .wl th button { font: 600 11px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
+                  background: none; border: 0; padding: 12px 10px; cursor: pointer; width: 100%; text-align: inherit; }
+  .wl th[aria-sort="ascending"] button, .wl th[aria-sort="descending"] button { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
+  .wl th[aria-sort="ascending"] button::after { content: " \2191"; }
+  .wl th[aria-sort="descending"] button::after { content: " \2193"; }
+  .wl td { padding: 8px 10px; vertical-align: top; color: var(--ink); }
+  .wl .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .wl .ev { font-weight: 600; }
+  .wl .ev small, .wl td small { display: block; font-weight: 400; color: var(--muted); font-size: 12.5px; line-height: 1.4; }
+  .wl .mk { font: 700 19px/1.1 var(--display); letter-spacing: .02em; white-space: nowrap; }
+  .wl .pc { font: 800 22px/1 var(--display); }
+  .wl .pending { color: var(--accent); }
+  .pbar { position: relative; height: 10px; width: 120px; background: color-mix(in srgb, var(--ink) 7%, transparent); margin-top: 6px; }
+  .pbar i { position: absolute; top: 0; bottom: 0; left: 0; background: var(--accent); }
+  .pbar b { position: absolute; top: 4px; height: 2px; background: var(--ink); }
+  .wl-note { font-family: var(--sans); font-size: 14px; color: var(--muted); margin: 10px 0 0; max-width: 70ch; }
+  .chart { border: 1px solid var(--rule); background: var(--card); padding: 10px 10px 4px; }
   .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
   .chart text { font-family: var(--sans); font-size: 12px; fill: var(--muted); }
   .chart .lbl { font-weight: 600; font-size: 13px; }
   .chart .grid { stroke: var(--rule); stroke-width: 1; }
-  .chart .half { stroke: var(--edge); stroke-dasharray: 2 4; }
+  .chart .diag { stroke: var(--edge); stroke-dasharray: 3 4; }
   .chart .axis { stroke: var(--edge); }
-  .chart .c-all { fill: none; stroke: var(--accent); stroke-width: 2.4; }
-  .chart .c-pre { fill: none; stroke: var(--edge); stroke-width: 2.2; }
-  .chart .c-post { fill: none; stroke: var(--accent2); stroke-width: 2.4; }
-  .chart .t-all { fill: var(--accent); } .chart .t-pre { fill: var(--muted); } .chart .t-post { fill: var(--accent2); }
-  .chart .band { fill: color-mix(in srgb, var(--accent) 14%, transparent); }
-  .chart .cursor { stroke: var(--ink); stroke-width: 1; }
-  .chart .pt { fill: var(--paper); stroke: var(--ink); stroke-width: 2; }
+  .chart .km { fill: none; stroke: var(--accent); stroke-width: 2.4; }
+  .chart .mod { fill: none; stroke: var(--accent2); stroke-width: 2.2; stroke-dasharray: 7 4; }
+  .chart .t-km { fill: var(--accent); } .chart .t-mod { fill: var(--accent2); }
+  .chart .half { stroke: var(--edge); stroke-dasharray: 2 4; }
   .chart .rec { fill: var(--ink); }
-  .readout { font-family: var(--sans); font-size: 16px; color: var(--ink2); margin: 12px 0 0; min-height: 3.2em; max-width: 62ch; }
-    .readout b { line-height: 1; font-family: var(--display); font-size: 1.45em; font-weight: 800; color: var(--accent); letter-spacing: .01em; }
-  .jump { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 0; padding: 0; list-style: none; }
-  .jump button { font: 600 13px/1.2 var(--sans); padding: 6px 9px; background: var(--card); color: var(--ink);
-                 border: 1px solid var(--edge); cursor: pointer; }
-  .jump button:hover, .jump button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-  .jump-h { font: 600 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 22px 0 0; }
+  .chart .pt { stroke: var(--card); stroke-width: 2; }
+  .chart .pt.m { fill: var(--accent); } .chart .pt.b { fill: var(--muted); }
+  .chart .ln { fill: none; stroke-width: 2; } .chart .ln.m { stroke: var(--accent); } .chart .ln.b { stroke: var(--muted); }
+  .chart .pt:focus { outline: none; stroke: var(--ink); stroke-width: 3; }
+  .readout { font-family: var(--sans); font-size: 15.5px; color: var(--ink2); margin: 12px 0 0; min-height: 3em; max-width: 64ch; }
+  .readout b { color: var(--ink); }
+  .scores { margin-top: 26px; }
+  .scores td.best { font-weight: 700; color: var(--accent2); }
+  .miss { margin: 18px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--rule); max-width: 66ch; }
+  .miss li { padding: 10px 0; border-bottom: 1px solid var(--rule); font-family: var(--sans); font-size: 15px; color: var(--ink2); }
+  .miss b { color: var(--ink); }
   .aside2 { display: grid; gap: 8px 40px; margin-top: 30px; padding-top: 18px; border-top: 2px solid var(--ink); }
   .aside2 h3 { font-family: var(--display); font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: .01em; margin: 0; }
   .aside2 p { margin: 0 0 12px; font-size: .95em; }
   @media (min-width: 860px) { .aside2 { grid-template-columns: 12rem 1fr; } }
-  .multiples { display: grid; grid-template-columns: repeat(auto-fill, minmax(232px, 1fr)); gap: 26px 26px; margin-top: 26px; }
-  .sm h3 { font-family: var(--display); font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; margin: 0 0 2px;
-           display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--ink); padding-bottom: 4px; }
-  .sm h3 span { font: 400 12px/1 var(--mono); text-transform: none; letter-spacing: 0; color: var(--muted); }
-  .sm .chart text { font-size: 11px; }
-  .sm .step { fill: none; stroke: var(--accent); stroke-width: 1.8; }
-  .sm .dot { fill: var(--paper); stroke: var(--accent); stroke-width: 1.4; }
-  .sm .dot.open { fill: var(--accent); }
-  .sm .hi { fill: var(--ink); stroke: var(--ink); }
-  .sm .smro { font: 400 13px/1.35 var(--mono); color: var(--ink2); margin: 4px 0 0; min-height: 2.7em; }
-  .sm svg:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .boardwrap { margin-top: 28px; }
+  .superseded { border: 1px solid var(--edge); padding: 14px 18px; margin-top: 18px; background: var(--card); }
+  .superseded p { margin: 0 0 10px; font-size: .95em; }
+  .superseded p:last-child { margin-bottom: 0; }
+  .wl .dt { white-space: nowrap; }
+  .pbar { margin-left: auto; }
+  .wl .mob { display: none; }
+  @media (max-width: 640px) {
+    .wl table { min-width: 0; font-size: 14px; }
+    .wl .c-h, .wl .c-d, .wl .c-a { display: none; }
+    .wl .mob { display: block; }
+    .wl td, .wl th button { padding-left: 7px; padding-right: 7px; }
+    .wl .mk { font-size: 17px; }
+    .pbar { width: 64px; }
+  }
 </style>
 
 <div class="wrap">
   <header class="masthead">
     <div class="logo"><span class="dot" aria-hidden="true"></span>World-record half-lives</div>
-    <div class="tagline">248 reigns, nine events, Kaplan-Meier and Cox</div>
+    <div class="tagline">46 events, 1,251 reigns, backtested from 2010</div>
   </header>
 
   <section class="hero">
-    <p class="kicker">Survival analysis on athletics world records</p>
-    <h1>Half of all world records fall within 1.5 years</h1>
+    <p class="kicker">Survival analysis on every Olympic athletics world record</p>
+    <h1>Which world records fall before LA 2028</h1>
 
     <p class="hero-sub">
-      A world record lives from the day it is set to the day it is broken. Measured that
-      way across 248 reigns in nine events, the median record lasts 1.5 years, records set
-      since 1980 fall at about half the rate of older ones, and of the nine standing today
-      the 2023 marathon record is the most likely to go in the next five years (60%).
+      I rebuilt the ratified progression of all 46 Olympic athletics events from World
+      Athletics' own lists and treated each record as a survival time. A model fitted only
+      on what was known at the end of 2010 beat the historical base rate on what happened
+      from 2011 to 2025, though it ran overconfident. Applied today, it puts Duplantis's
+      6.31 pole vault first in line to fall before the Games close (48%) and Florence
+      Griffith Joyner's 10.49 last (5%).
     </p>
 
     <div class="cta-row">
-      <a class="btn btn-primary" href="../">Read the short version</a>
+      <a class="btn btn-primary" href="#watchlist">Go to the watchlist</a>
       <a class="textlink" href="https://github.com/lyhjeremy/world-record-half-lives">Code and data on GitHub</a>
     </div>
 
     <div class="claims">
       <div class="claim">
-        <div class="n">1.5 yr</div>
-        <p>Kaplan-Meier median reign across all 248 records. Most of the risk comes in the first two years.</p>
+        <div class="n">1,251</div>
+        <p>Record reigns in 46 events, from World Athletics' ratified lists, checked against its records page on 28 October 2026.</p>
       </div>
       <div class="claim">
-        <div class="n">HR 0.52</div>
-        <p>Cox hazard ratio for a record set in 1980 or later (p &lt; 0.001). Modern records fall at about half the rate.</p>
+        <div class="n">0.235</div>
+        <p>Brier score on the 46 records standing at the end of 2010, scored on 2011 to 2025. The base rate scores 0.329; lower is better.</p>
       </div>
       <div class="claim">
-        <div class="n">HR 0.65</div>
-        <p>Per percentage point by which a record beat the one before it (p = 0.0002). Big jumps last longer.</p>
+        <div class="n">50% &rarr; 24%</div>
+        <p>In the rolling backtest, records the model gave 40 to 60% fell 24% of the time. It overestimates how fast records go.</p>
       </div>
       <div class="claim">
-        <div class="n">60% to 0%</div>
-        <p>Five-year fall probabilities for the nine standing records, from the 2023 marathon to the 1983 women's 800 m.</p>
+        <div class="n">48%</div>
+        <p>Chance Duplantis's 6.31 falls before 30 July 2028, the highest of any record. 90% interval 19 to 57%.</p>
       </div>
     </div>
   </section>
@@ -359,190 +368,266 @@
 <div class="wrap">
 <div class="route">
 
-  <section class="stop stop--key">
-    <p class="eyebrow">The curve</p>
-    <h2>Most records fall early</h2>
+  <section class="stop stop--key" id="watchlist">
+    <p class="eyebrow">The watchlist</p>
+    <h2>Every standing record, ranked</h2>
     <p>
-      The curve below is the share of records still standing after a given number of years.
-      It drops fast: half are gone by 1.5 years, three quarters by about five. A new record
-      is most exposed right after it is set, while the athlete who set it and the rivals
-      chasing it are still competing. Records that get through the first few years flatten
-      into a long tail, and every record people call untouchable lives in that tail.
+      Each row is a world record standing on 28 October 2026. The two probabilities are the
+      model's chance that the record falls before the LA 2028 Olympics close on 30 July 2028
+      (21 months away) and within five years. The bar shows the LA 2028 figure with its 90%
+      interval, which comes from refitting the model on 200 resamples of the 46 events.
+      Click a column heading to sort.
     </p>
-    <p>
-      Drag the slider, or hover the chart, to set how long a record has already stood. The
-      shaded band is the next five years, and the readout is the chance the record falls
-      inside it: 1 &minus; S(t+5) / S(t).
-    </p>
-
-    <figure>
-      <div class="ctl">
-        <div class="seg" role="group" aria-label="Curves to show">
-          <button type="button" data-mode="all" aria-pressed="true">All records</button>
-          <button type="button" data-mode="era" aria-pressed="false">Split at 1980</button>
-        </div>
-        <div class="age">
-          <label for="hl-age">Stood for</label>
-          <input id="hl-age" type="range" min="0" max="50" step="0.1" value="2.7" />
-          <output for="hl-age" id="hl-age-out">2.7 yr</output>
-        </div>
-      </div>
-      <div class="chart" id="hl-km"></div>
-      <p class="readout" id="hl-read" aria-live="polite"></p>
-      <p class="jump-h" id="hl-jump-h">Set the slider to a standing record</p>
-      <ul class="jump" id="hl-jump" aria-labelledby="hl-jump-h"></ul>
-      <noscript>
-        <div class="plate"><img width="1200" height="750" src="../figures/record_survival.png"
-          alt="Kaplan-Meier survival curves for world records set before 1980 (n=170) and from 1980 on (n=78). Both drop below one half within about two years; the post-1980 curve sits above the older one for most of the range." /></div>
-      </noscript>
-      <figcaption>Kaplan-Meier survival of 248 world-record reigns, computed in your browser from
-        <code>tables/record_reigns.csv</code>; it reproduces the medians and five-year
-        probabilities that <code>analyze.py</code> wrote with lifelines. Time axis on a
-        square-root scale so the first two years get room. The small
-        black dots are the nine records standing today. Confidence bands are in
-        <a href="../figures/record_survival.png">the static figure</a>.</figcaption>
-    </figure>
+    <div class="seg" role="group" aria-label="Filter the watchlist">
+      <button type="button" data-sex="all" aria-pressed="true">All 46</button>
+      <button type="button" data-sex="M" aria-pressed="false">Men</button>
+      <button type="button" data-sex="W" aria-pressed="false">Women</button>
+    </div>
+    <div class="wl" role="region" aria-label="Watchlist of standing world records" tabindex="0">
+      <div data-loading class="skeleton sk-table" aria-hidden="true"></div>
+      <table id="wl-table" hidden>
+        <thead><tr>
+          <th aria-sort="none"><button type="button" data-k="label">Event</button></th>
+          <th aria-sort="none"><button type="button" data-k="value">Record</button></th>
+          <th class="c-h" aria-sort="none"><button type="button" data-k="athlete">Holder</button></th>
+          <th class="c-d" aria-sort="none"><button type="button" data-k="date_set">Set</button></th>
+          <th class="num c-a" aria-sort="none"><button type="button" data-k="age_years">Age (yr)</button></th>
+          <th class="num" aria-sort="descending"><button type="button" data-k="p_la28">Before LA 2028</button></th>
+          <th class="num" aria-sort="none"><button type="button" data-k="p_5yr">Within 5 yr</button></th>
+        </tr></thead>
+        <tbody id="wl-body"></tbody>
+      </table>
+    </div>
+    <p class="wl-note">From <code>tables/watchlist.csv</code>. Age is how long the record has stood. Two
+      events have a faster mark pending ratification, set in Zürich on 27 August 2026; if it is
+      ratified, that record has already fallen.</p>
 
     <div class="aside2">
-      <h3>Why not average the reigns?</h3>
+      <h3>The marathon line was stale</h3>
       <div>
         <p>
-          An average of past reigns only sees records that have already been broken. It
-          leaves out every record still standing, and those are the long-lived ones, so it
-          comes out short by construction.
-        </p>
-        <p>
-          Survival analysis treats a standing record as censored: it has lasted at least
-          <em>t</em> years and nobody knows how much longer it will go. Kaplan-Meier keeps it
-          in the risk set for every year it has survived. Of the 248 reigns, 239 ended in a
-          new record and 9 are censored.
+          The July 2026 version of this page said Kelvin Kiptum's 2:00:35 had a 60% chance of
+          falling within five years. It had already fallen: Sabastian Sawe ran 1:59:30 in London
+          on 26 April 2026, and World Athletics ratified it in July. The old pipeline had a
+          hard-coded reference list and never looked at the current records. This version checks
+          all 46 against World Athletics' records page, and its run fails if any differs.
         </p>
       </div>
     </div>
   </section>
 
   <section class="stop">
-    <p class="eyebrow">Today</p>
-    <h2>Which record falls next</h2>
+    <p class="eyebrow">The backtest</p>
+    <h2>Fit to 2010, score on 2011 to 2025</h2>
     <p>
-      Young records sit on the steep part of the curve and score high. Old records have
-      already passed it. Ages are as of the July 2026 run, so the numbers move as the
-      calendar does.
+      The only fair test of a forecast is time. I cut the data at 31 December 2010: records set
+      later were removed, and reigns still running were censored at that date. The model was
+      fitted on that, then asked for each of the 46 records standing at the cut: what is the chance
+      this falls in the next 15 years? Then I checked what happened. 26 of the 46 fell.
     </p>
-    <div class="board boardwrap" role="region" aria-label="Five-year fall probability for each standing record" tabindex="0">
-      <table>
-        <thead><tr><th>Lane</th><th>Event</th><th>Record</th><th>Set</th><th>Fall in 5 yr</th><th></th></tr></thead>
-        <tbody>
-          <tr><td class="lane">1</td><td>Marathon</td><td class="mark">2:00:35</td><td>2023</td><td class="bar"><span style="width:60%"></span></td><td class="p">60%</td></tr>
-          <tr><td class="lane">2</td><td>High jump (W)</td><td class="mark">2.10 m</td><td>2024</td><td class="bar"><span style="width:59%"></span></td><td class="p">59%</td></tr>
-          <tr><td class="lane">3</td><td>Shot put</td><td class="mark">23.56 m</td><td>2023</td><td class="bar"><span style="width:57%"></span></td><td class="p">57%</td></tr>
-          <tr><td class="lane">4</td><td>10,000 m</td><td class="mark">26:11.00</td><td>2020</td><td class="bar"><span style="width:52%"></span></td><td class="p">52%</td></tr>
-          <tr><td class="lane">5</td><td>5000 m</td><td class="mark">12:35.36</td><td>2020</td><td class="bar"><span style="width:51%"></span></td><td class="p">51%</td></tr>
-          <tr><td class="lane">6</td><td>800 m</td><td class="mark">1:40.91</td><td>2012</td><td class="bar"><span style="width:44%"></span></td><td class="p">44%</td></tr>
-          <tr><td class="lane">7</td><td>100 m</td><td class="mark">9.58 s</td><td>2009</td><td class="bar"><span style="width:37%"></span></td><td class="p">37%</td></tr>
-          <tr><td class="lane">8</td><td>1500 m</td><td class="mark">3:26.00</td><td>1998</td><td class="bar"><span style="width:25%"></span></td><td class="p">25%</td></tr>
-          <tr><td class="lane">9</td><td>800 m (W)</td><td class="mark">1:53.28</td><td>1983</td><td class="bar"><span class="zero"></span></td><td class="p">0%</td></tr>
-        </tbody>
+    <p>
+      The base rate is the share of standing records that fell within 15 years at every earlier
+      year end whose outcome was known by 2010 (85%). The pooled rate is one constant hazard
+      for every record. The Kaplan-Meier method is the July 2026 approach. A Brier score is the
+      mean squared gap between the probability and what happened, so lower is better; an AUC of
+      0.5 is a coin toss.
+    </p>
+    <div class="tablewrap scores">
+      <div data-loading class="skeleton sk-small" aria-hidden="true"></div>
+      <table id="bt-table" hidden>
+        <thead><tr><th>Forecast</th><th>2010 cut: Brier</th><th>AUC</th><th>2000 cut: Brier</th><th>Rolling: Brier</th><th>AUC</th></tr></thead>
+        <tbody id="bt-body"></tbody>
       </table>
     </div>
-    <p class="board-note">From <code>tables/current_record_vulnerability.csv</code>. Men's events unless marked (W).</p>
-    <p style="margin-top:22px">
-      The marathon record sits in the middle of a shoe-driven run of new marks, which I
-      took apart separately in
-      <a href="https://lyhjeremy.github.io/marathon-shoe-revolution-decomposition/">the super-shoe study</a>.
+    <p style="margin-top:18px">
+      The model's Brier gain over the base rate at the 2010 cut is 0.093, with a 90% interval of
+      0.030 to 0.157 when the 46 events are resampled, so the gain is unlikely to be luck. Its
+      edge over the Kaplan-Meier method is small (0.235 against 0.250) and well inside the noise
+      for 46 records. At the 2000 cut every method did badly: the model and the base rate both
+      expected most records to fall, and the 2000s turned out to be a slow decade for records.
     </p>
+
+    <h3 style="margin-top:34px">Reliability</h3>
+    <p>
+      The rolling test refits at every year end from 1985 to 2020 and predicts the next five
+      years, which gives 1,535 predictions, 508 of them records that fell. The chart puts the
+      predicted chance against the share that fell, in bins. A forecast on the dotted line is
+      calibrated. Below the line means records fell less often than the model said.
+    </p>
+    <figure>
+      <div class="seg" role="group" aria-label="Backtest to show">
+        <button type="button" data-rel="rolling" aria-pressed="true">Rolling, 1,535 predictions</button>
+        <button type="button" data-rel="y2010" aria-pressed="false">2010 cut, 46 records</button>
+      </div>
+      <div class="chart" id="rel-chart"><div data-loading class="skeleton sk-chart" aria-hidden="true"></div></div>
+      <p class="readout" id="rel-read" aria-live="polite"></p>
+      <figcaption>Predicted against observed, from <code>tables/reliability_rolling.csv</code> and
+        <code>tables/reliability_2010.csv</code>. Red is the frailty model; grey is the
+        Kaplan-Meier method on the same cutoffs. Focus a point, or hover it, to read the bin.</figcaption>
+    </figure>
+    <p style="margin-top:20px">
+      Both lines sit below the diagonal from about 40% up. When the model said a coin flip, the
+      record fell about a quarter of the time. The reason is the one the model was built to
+      handle and only partly does: records have been getting harder to break, and a model
+      trained on the past keeps expecting the faster pace of the past. Read the watchlist with
+      that in mind. Its ranking is more useful than its levels.
+    </p>
+    <ul class="miss" id="bt-miss"></ul>
   </section>
 
   <section class="stop">
-    <p class="eyebrow">Cox model</p>
-    <h2>Two things predict a long reign</h2>
+    <p class="eyebrow">Survival by event group</p>
+    <h2>How long records last, event by event</h2>
     <p>
-      The Cox proportional-hazards model was fit on the 239 reigns that have a previous
-      record to compare against; the first record in each event has no improvement margin.
-      A hazard ratio below 1 means a record falls more slowly.
+      Across all 1,251 reigns the Kaplan-Meier median is 1.1 years. Groups differ a lot. Half of
+      all throws and jumps records were gone inside a year, many of them broken in the same
+      season by the same athlete. Sprint records have a median of 3.0 years. The dashed line is
+      the model's curve for a record set today in a group with no other recent records.
+    </p>
+    <figure>
+      <div class="seg" role="group" aria-label="Event group" id="grp-seg"></div>
+      <div class="chart" id="grp-chart"><div data-loading class="skeleton sk-chart" aria-hidden="true"></div></div>
+      <p class="readout" id="grp-read" aria-live="polite"></p>
+      <figcaption>Kaplan-Meier survival (solid) and the frailty model's population curve (dashed),
+        from <code>web/data.json</code>, which <code>analyze.py</code> writes. Time on a square-root
+        scale. Black dots are the records in the group standing today.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop">
+    <p class="eyebrow">The model</p>
+    <h2>Weibull with a frailty for each event</h2>
+    <p>
+      The main model is a Weibull proportional-hazards model with a shared gamma frailty per
+      event, fitted by maximum likelihood in SciPy. The Weibull part says how risk changes with a
+      record's age: the shape is 0.69, so the yearly risk drops as a record gets older. The frailty
+      is a multiplier for each event, estimated from that event's own history and pulled toward
+      the average when the history is short. Every reign is split at each 1 January so two
+      covariates can change while a record stands: the calendar period, and how many records the
+      event has seen in the last three years.
     </p>
     <div class="tablewrap">
-      <table>
-        <thead><tr><th>Covariate</th><th>Hazard ratio</th><th>p</th><th>Reading</th></tr></thead>
-        <tbody>
-          <tr class="win"><td>Set in 1980 or later</td><td>0.52</td><td>&lt; 0.001</td><td>About half the yearly risk of being broken</td></tr>
-          <tr class="win"><td>Improvement over previous record (per % point)</td><td>0.65</td><td>0.0002</td><td>A 2% jump cuts the hazard to about 0.42</td></tr>
-          <tr><td>Distance event</td><td>0.78</td><td>0.07</td><td>Weaker, and not significant at 5%</td></tr>
-        </tbody>
+      <div data-loading class="skeleton sk-small" aria-hidden="true"></div>
+      <table id="hr-table" hidden>
+        <thead><tr><th>Covariate</th><th>Hazard ratio</th><th>95% interval</th><th>Reading</th></tr></thead>
+        <tbody id="hr-body"></tbody>
       </table>
     </div>
     <p style="margin-top:22px">
-      The era effect matches what happened to the sport after 1980: it turned professional,
-      the easy gains were gone, and each new mark got harder to beat. Use the
-      <em>Split at 1980</em> toggle above to see it as two curves: the median reign is about
-      1.2 years for the 170 earlier records and about 2.0 years for the 78 later ones. The
-      margin effect is the Beamon case. A record that beats its predecessor by a wide gap
-      leaves the rest of the field further behind.
+      A hazard ratio above 1 means records fall sooner. Three effects are strong. Since 2000,
+      records at risk fall at about half the rate of 1980 to 1999 (0.53). Each percentage point by
+      which a record beat its predecessor cuts the hazard by a fifth (0.79). And an event that has
+      just seen records keeps seeing them: a record with three others set in its event in the
+      last three years carries about a quarter more risk than one that is the only recent record
+      (1.28 per unit of log count). Throws and jumps fall about twice as fast as
+      sprints.
+    </p>
+    <p>
+      Kaplan-Meier and a Cox model are the baseline. The Cox model's proportional-hazards test
+      fails for the era covariates (p &lt; 0.001 for records set in 1980 to 1999), which is why the
+      main model uses the calendar period a record is at risk in rather than the year it was set.
+      By AIC the final model beats a plain Weibull by 66 points and log-normal and log-logistic
+      versions by more than 150.
+    </p>
+    <div class="tablewrap">
+      <div data-loading class="skeleton sk-small" aria-hidden="true"></div>
+      <table id="aic-table" hidden>
+        <thead><tr><th>Model</th><th>Parameters</th><th>Log-likelihood</th><th>&Delta; AIC</th></tr></thead>
+        <tbody id="aic-body"></tbody>
+      </table>
+    </div>
+    <p style="margin-top:22px">
+      One caveat about the order of work. I specified the first frailty model before running any
+      backtest. It used the era a record was set in, and it scored worse at the 2010 cut (0.273).
+      I then added the calendar period and the recent-record count. Both choices were made after
+      seeing those scores, so the 2010 and rolling numbers for the final model are not a clean
+      holdout of the model choice. All three versions are in <code>tables/backtest_summary.csv</code>.
     </p>
   </section>
 
   <section class="stop">
     <p class="eyebrow">The data</p>
-    <h2>Nine events passed the completeness gate</h2>
+    <h2>World Athletics' own lists</h2>
     <p>
-      Progressions come from Wikipedia's record-progression pages via
-      <code>pandas.read_html</code>. Those pages mix the progression with all-time lists
-      and navigation tables, and a naive scrape can stop an event's history decades early
-      without any visible error. So <code>fetch_data.py</code> keeps an event only if its
-      reconstructed running best is within 0.5% of the ratified record, its history reaches
-      back to 1970 or earlier, and it has at least 12 marks. Nine of 21 candidate events pass.
+      The progressions come from the "Progression of Official World Records" section of World
+      Athletics' Oregon22 statistics handbook, which lists every ratified record to 31 May 2022,
+      equalling marks included. The 30 records ratified since then come from World Athletics'
+      progression pages, 11 of them Duplantis vaults. Wikipedia is only a cross-check: 1,456 of
+      the 1,464 listed records appear there with the same mark and year.
     </p>
-    <figure>
-      <div class="multiples" id="hl-sm"></div>
-      <noscript>
-        <div class="plate"><img width="1650" height="1125" src="../figures/progressions.png"
-          alt="Record progression curves for the analyzed events, each improving over time in smaller and smaller steps, with fitted deceleration curves that flatten in recent decades." /></div>
-      </noscript>
-      <figcaption>Every record in the sample, from <code>tables/record_reigns.csv</code>. Up is
-        better in every panel (times are flipped). Shared time axis, 1896 to 2026; each step
-        is one reign. A filled dot is a record still standing. Hover a panel, or focus it and
-        use the arrow keys, to read the marks.</figcaption>
-    </figure>
-    <p style="margin-top:22px">
-      Every progression decelerates, each new record taking off less than the one before.
-      I fitted asymptotic curves to them (in <a href="../figures/progressions.png">the static
-      figure</a>), but for events still improving the limit runs off wherever the optimizer
-      lets it, so no event limit is reported and the ranking above uses the survival curve alone.
+    <p>
+      Hand and automatic timing are two chains. World Athletics accepted only automatic times
+      for events up to 400 m from 1 January 1977, so the hand-timed record standing that day is
+      censored then rather than counted as broken, and automatic records older than 1975 enter
+      the risk set late. Javelin chains restart with the new implements of 1986 and 1999. Road
+      records count only from 2004, when World Athletics began ratifying them. Every rule, and
+      every record dropped, is in <a href="https://github.com/lyhjeremy/world-record-half-lives/blob/main/docs/data_decisions.md">docs/data_decisions.md</a>.
+    </p>
+    <p>
+      A validation script flags every reign over 20 years and every unusually large jump (95
+      flags) and looks each one up. The flag that started this rebuild was the women's 800 m. The
+      July version had three reigns, one of them a 1:54.0 from 1925 that stood 55 years. The
+      handbook lists 29 women's 800 m records from 1922, the fastest of the 1920s being 2:16.8.
+      The 1925 row was a misread.
     </p>
   </section>
 
   <section class="stop stop--warn">
     <p class="eyebrow">Limitations</p>
-    <h2>What this doesn't show</h2>
+    <h2>What the model can't see</h2>
     <p>
-      The model knows when records fell. It doesn't know the pressure on them now, such as
-      how many athletes are within 1% this season. That would be the next feature to add.
+      It knows when records fell and how busy each event has been. It does not know who is close
+      now. Duplantis has set the record 15 times since February 2020, usually by a centimeter,
+      so 48% is probably too low for the pole vault. The women's pole vault (28%)
+      shows the opposite problem: the event's busy 1990s and 2000s still lift its frailty, while
+      nobody has come near 5.06 for years.
     </p>
     <p>
-      The 0% for the women's 800 m is partly mechanical. No reign in the data ends between
-      43 and 48 years, so the curve is flat across that stretch and the formula returns zero.
-      Set the slider to 42.9 years to see it. "Very unlikely" is a fair reading;
-      "impossible" is not.
+      The backtest is small. 46 records at the 2010 cut, and the rolling test reuses the same
+      records many times, so its 1,535 predictions are far from independent. The calibration
+      problem is real; the exact size of the model's edge is not well pinned down.
     </p>
     <p>
-      The same event contributes only three reigns, one of them running 55 years from 1925 to
-      1980, and its 1925 mark (1:54.0) is within a second of the 1980 one. That looks like
-      missing or misread rows. The gate checks the end point and the start year, not the
-      gaps in between.
+      Holder age was on the list of covariates to test. The handbook has no dates of birth, and
+      World Athletics' progression pages, which do, only load in a browser; I did not collect
+      them for all 1,464 records, so age is not in the model. The watchlist
+      does not adjust for doping-era records either, which the model treats like any other.
     </p>
+  </section>
+
+  <section class="stop">
+    <p class="eyebrow">October 2026 upgrade</p>
+    <h2>What changed from the July version</h2>
+    <p>
+      The July 2026 analysis used 248 reigns from 9 events that passed a completeness gate on a
+      Wikipedia scrape. This version covers all 46 Olympic events from World Athletics' own
+      lists, adds a parametric model with per-event frailty, tests it with a time-split backtest,
+      and forecasts to LA 2028.
+    </p>
+    <div class="superseded">
+      <p><b>Superseded on 28 October 2026.</b> The July headline numbers were a median reign of 1.5
+        years, a Cox hazard ratio of 0.52 for records set in 1980 or later, 0.65 per point of
+        improvement, and five-year fall chances from 60% (the 2023 marathon) to 0% (the 1983
+        women's 800 m).</p>
+      <p>On the full data the median reign is 1.1 years. The 1980 split in median reign is gone
+        (1.09 years before, 1.03 after). The slowdown shows up as a lower hazard in the period
+        since 2000, not in the year a record was set. The margin effect holds at 0.79 per
+        point. The 0% for the women's 800 m came from a data error and a flat stretch of the
+        Kaplan-Meier curve; the model now puts that record at 9% before LA 2028.</p>
+    </div>
   </section>
 
   <section class="stop stop--end">
     <p class="eyebrow">How it was built</p>
     <h2>Where the numbers come from</h2>
     <dl class="specs">
-      <div class="spec"><dt>Data</dt><dd>Wikipedia world-record progression pages, read with <code>pandas.read_html</code></dd></div>
-      <div class="spec"><dt>Gate</dt><dd>Running best within 0.5% of the ratified record, history to 1970 or earlier, at least 12 marks</dd></div>
-      <div class="spec"><dt>Sample</dt><dd>248 reigns (239 broken, 9 standing) across nine events, first record 1896</dd></div>
-      <div class="spec"><dt>Models</dt><dd>Kaplan-Meier survival; Cox proportional hazards on era, improvement margin and event type</dd></div>
-      <div class="spec"><dt>Forecast</dt><dd>Conditional five-year fall probability, 1 &minus; S(t+5) / S(t)</dd></div>
-      <div class="spec"><dt>Built with</dt><dd>Python, pandas, lifelines, SciPy, matplotlib; the charts on this page are plain SVG drawn from the CSV</dd></div>
-      <div class="spec"><dt>Tables</dt><dd><code>record_reigns.csv</code>, <code>cox_summary.csv</code>, <code>current_record_vulnerability.csv</code></dd></div>
+      <div class="spec"><dt>Data</dt><dd>World Athletics Oregon22 handbook progressions (to May 2022), World Athletics progression and records pages (to 28 October 2026)</dd></div>
+      <div class="spec"><dt>Sample</dt><dd>1,464 ratified records, 1,251 reigns (1,192 broken, 46 standing, 13 closed by rule changes), 46 events</dd></div>
+      <div class="spec"><dt>Checks</dt><dd>End points against World Athletics, gap and jump flags, Wikipedia cross-check (99.5% match)</dd></div>
+      <div class="spec"><dt>Models</dt><dd>Kaplan-Meier, Cox with a proportional-hazards test, Weibull, log-normal and log-logistic AFT, Weibull with gamma frailty per event</dd></div>
+      <div class="spec"><dt>Backtest</dt><dd>Fit at 2010 and 2000 with 15-year horizons; rolling fits 1985 to 2020 with 5-year horizons; Brier, AUC, reliability</dd></div>
+      <div class="spec"><dt>Intervals</dt><dd>90%, from 200 refits on resampled events</dd></div>
+      <div class="spec"><dt>Built with</dt><dd>Python, pandas, SciPy, lifelines, matplotlib, poppler; the charts here are plain SVG drawn from <code>web/data.json</code></dd></div>
     </dl>
   </section>
 
@@ -551,7 +636,7 @@
 
 <div class="wrap">
   <section class="close">
-    <h2>The old records are the ones that got through the first two years</h2>
+    <h2>Records keep falling, just more slowly than the past says they should</h2>
     <div class="cta-row">
       <a class="btn btn-primary" href="../">Read the short version</a>
       <a class="textlink" href="https://github.com/lyhjeremy/world-record-half-lives">Code and data on GitHub</a>
@@ -565,22 +650,12 @@
       <a href="https://github.com/lyhjeremy/world-record-half-lives">Source</a> ·
       MIT © 2026 Jeremy Lee
     </p>
-    <p>Record data from Wikipedia progression pages.</p>
+    <p>Record data from World Athletics: the Oregon22 statistics handbook and worldathletics.org records pages.</p>
   </footer>
 </div>
 
 <script>
 (function () {
-  // [decimal year set, value, reign in years, broken (1) or standing (0)], from tables/record_reigns.csv
-  var R = {"10000m":[[1904.846,1862.4,7.0281,1],[1911.873,1858.8,9.5989,1],[1921.471,1840.2,2.924,1],[1924.397,1835.4,0.115,1],[1924.512,1823.2,0.1533,1],[1924.665,1806.2,12.8789,1],[1937.542,1805.6,1.1992,1],[1938.742,1802.0,0.9665,1],[1939.709,1792.6,4.9391,1],[1944.649,1775.4,4.794,1],[1949.441,1768.2,0.2245,1],[1949.665,1767.2,0.1396,1],[1949.805,1761.2,0.783,1],[1950.589,1742.6,3.2444,1],[1953.832,1741.6,0.5804,1],[1954.413,1734.2,2.1218,1],[1956.537,1722.8,0.1588,1],[1956.695,1710.4,4.0931,1],[1960.789,1698.8,1.8207,1],[1962.608,1698.2,1.3525,1],[1963.961,1695.6,1.5715,1],[1965.531,1659.4,7.1403,1],[1972.674,1658.4,0.8569,1],[1973.528,1650.8,3.9644,1],[1977.493,1650.5,0.9473,1],[1978.441,1642.4,6.0589,1],[1984.501,1633.81,5.128,1],[1989.627,1628.23,3.8795,1],[1993.507,1627.91,0.0137,1],[1993.52,1618.38,1.0322,1],[1994.553,1612.23,0.8706,1],[1995.424,1603.53,1.2183,1],[1996.643,1598.08,0.8624,1],[1997.504,1591.32,0.1342,1],[1997.638,1587.85,0.7748,1],[1998.413,1582.75,6.0205,1],[2004.435,1580.31,1.2156,1],[2005.649,1577.53,15.1157,1],[2020.767,1571.0,5.7331,0]],"100m":[[1896.605,10.8,10.0424,1],[1906.649,10.6,4.8679,1],[1911.517,10.5,9.7906,1],[1921.307,10.4,9.295,1],[1930.602,10.3,5.8645,1],[1936.468,10.2,20.1205,1],[1956.589,10.1,3.8823,1],[1960.471,10.0,7.9973,1],[1968.468,9.9,19.1923,1],[1987.66,9.83,1.0705,1],[1988.731,9.79,13.9713,1],[2002.701,9.78,2.7488,1],[2005.449,9.77,2.2368,1],[2007.687,9.74,0.7255,1],[2008.413,9.72,0.2108,1],[2008.624,9.69,0.9993,1],[2009.621,9.58,16.8761,0]],"1500m":[[1930.758,229.2,2.9514,1],[1933.709,229.0,0.783,1],[1934.493,228.8,2.1027,1],[1936.597,227.8,5.0103,1],[1941.605,227.6,0.9336,1],[1942.539,225.8,1.0842,1],[1943.624,225.0,0.8898,1],[1944.515,223.0,11.0554,1],[1955.569,220.8,1.0185,1],[1956.589,220.6,0.9363,1],[1957.523,220.2,0.0027,1],[1957.526,218.1,1.128,1],[1958.654,216.0,2.026,1],[1960.682,215.6,6.8337,1],[1967.515,213.1,6.5736,1],[1974.088,212.2,5.5305,1],[1979.619,212.1,1.0349,1],[1980.654,211.4,3.0007,1],[1983.654,211.24,0.0192,1],[1983.674,210.77,1.8645,1],[1985.537,209.67,0.104,1],[1985.641,209.46,7.039,1],[1992.682,208.86,2.8446,1],[1995.526,207.37,3.0062,1],[1998.531,206.0,27.9671,0]],"5000m":[[1904.449,899.0,8.0739,1],[1912.523,876.6,10.1739,1],[1922.695,875.4,1.7687,1],[1924.465,868.2,8.0,1],[1932.465,857.0,6.9897,1],[1939.454,848.8,3.2635,1],[1942.717,838.2,11.6906,1],[1954.408,837.2,0.2491,1],[1954.657,836.6,0.1232,1],[1954.78,831.6,0.0274,1],[1954.808,831.2,0.8816,1],[1955.69,830.8,0.0219,1],[1955.712,826.8,0.0958,1],[1955.808,820.6,0.6571,1],[1956.465,816.8,1.3169,1],[1957.78,815.0,7.2608,1],[1965.041,814.8,0.0438,1],[1965.085,813.6,0.3368,1],[1965.422,805.8,0.4901,1],[1965.912,804.2,0.5941,1],[1966.507,796.6,6.1958,1],[1972.704,796.4,0.0164,1],[1972.72,793.0,4.7885,1],[1977.507,792.9,0.7584,1],[1978.266,788.4,3.4333,1],[1981.698,786.2,0.8131,1],[1982.512,780.41,3.0554,1],[1985.567,780.4,1.9986,1],[1987.567,778.39,6.8556,1],[1994.422,776.96,1.0103,1],[1995.433,775.3,0.1889,1],[1995.621,764.39,1.9932,1],[1997.613,761.86,0.0246,1],[1997.638,759.74,0.8077,1],[1998.446,759.36,5.9658,1],[2004.413,757.35,16.2053,1],[2020.619,755.36,5.8809,0]],"800m":[[1928.534,110.6,4.052,1],[1932.586,109.8,4.0493,1],[1936.635,109.7,2.8994,1],[1939.534,106.6,16.052,1],[1955.586,105.7,13.2019,1],[1968.789,104.3,4.6982,1],[1973.485,103.7,3.0773,1],[1976.564,103.5,1.0732,1],[1977.635,103.4,1.87,1],[1979.507,102.4,1.9329,1],[1981.438,101.73,16.1752,1],[1997.613,101.24,0.0301,1],[1997.643,101.11,12.9938,1],[2010.638,101.09,0.0192,1],[2010.657,101.01,1.9466,1],[2012.605,100.91,13.8946,0]],"800m_w":[[1925.14,114.0,55.4278,1],[1980.569,113.5,2.9952,1],[1983.564,113.28,42.935,0]],"high_jump_w":[[1958.471,1.8,0.1068,1],[1958.578,1.81,0.178,1],[1958.756,1.82,0.0383,1],[1958.794,1.83,0.9254,1],[1959.72,1.84,0.7091,1],[1960.43,1.85,0.0931,1],[1960.523,1.86,0.7639,1],[1961.285,1.87,0.1752,1],[1961.46,1.88,0.0548,1],[1961.515,1.9,0.0219,1],[1961.537,1.91,10.1355,1],[1971.674,1.92,1.0568,1],[1972.731,1.94,1.9548,1],[1974.684,1.95,1.6646,1],[1976.35,1.96,1.2676,1],[1977.616,1.97,0.0329,1],[1977.649,2.0,0.9391,1],[1978.589,2.01,4.0958,1],[1982.684,2.02,0.4901,1],[1983.175,2.03,0.4709,1],[1983.646,2.04,0.8268,1],[1984.474,2.05,0.0767,1],[1984.55,2.07,1.8617,1],[1986.411,2.08,1.2485,1],[1987.66,2.09,36.8542,1],[2024.515,2.1,1.9849,0]],"marathon":[[1908.561,10518.4,0.4408,1],[1909.0,10365.4,0.115,1],[1909.115,10012.8,0.2327,1],[1909.348,9964.6,0.3149,1],[1909.663,9634.2,3.6961,1],[1913.359,9496.2,0.052,1],[1913.411,9366.6,7.2279,1],[1920.641,9155.8,5.1389,1],[1925.778,8941.8,9.4374,1],[1935.216,8774.0,12.0794,1],[1947.296,8739.0,5.1554,1],[1952.452,8442.2,0.9966,1],[1953.446,8320.4,0.3094,1],[1953.756,8314.8,0.7255,1],[1954.482,8259.4,4.1615,1],[1958.643,8117.0,2.0479,1],[1960.693,8116.2,2.4367,1],[1963.129,8115.8,0.3231,1],[1963.452,8068.0,0.9966,1],[1964.449,8035.0,0.3559,1],[1964.805,7931.2,0.6407,1],[1965.444,7920.0,2.475,1],[1967.92,7776.4,1.4894,1],[1969.408,7713.6,12.5202,1],[1981.928,7698.0,2.8747,1],[1984.805,7685.0,0.4956,1],[1985.298,7632.0,2.9925,1],[1988.293,7610.0,10.4257,1],[1998.717,7565.0,1.0924,1],[1999.81,7542.0,2.4723,1],[2002.282,7538.0,1.4565,1],[2003.739,7495.0,4.0055,1],[2007.745,7466.0,0.9966,1],[2008.742,7439.0,2.9897,1],[2011.731,7418.0,2.0123,1],[2013.742,7403.0,0.9966,1],[2014.739,7377.0,3.9671,1],[2018.706,7299.0,4.0246,1],[2022.731,7269.0,1.0349,1],[2023.767,7235.0,2.7324,0]],"shot_put":[[1909.635,15.54,18.7077,1],[1928.345,15.79,0.23,1],[1928.575,15.87,0.0767,1],[1928.652,16.04,3.4771,1],[1932.129,16.06,0.5257,1],[1932.654,16.16,0.0767,1],[1932.731,16.2,1.5715,1],[1934.301,16.48,0.0164,1],[1934.318,16.8,0.1752,1],[1934.493,16.89,0.0986,1],[1934.591,17.4,13.7002,1],[1948.293,17.68,1.2786,1],[1949.569,17.79,0.7529,1],[1950.323,17.82,0.3094,1],[1950.632,17.9,0.0055,1],[1950.638,17.95,2.7132,1],[1953.35,18.0,0.0739,1],[1953.424,18.04,0.7118,1],[1954.137,18.08,0.2108,1],[1954.348,18.42,0.0356,1],[1954.383,18.43,0.0575,1],[1954.441,18.54,1.6893,1],[1956.131,18.72,0.5421,1],[1956.674,19.06,0.1615,1],[1956.835,19.25,2.7461,1],[1959.58,19.3,0.5941,1],[1960.175,19.38,0.0383,1],[1960.214,19.45,0.0192,1],[1960.233,19.67,0.0192,1],[1960.252,19.99,0.3614,1],[1960.613,20.06,1.7632,1],[1962.375,20.08,1.8809,1],[1964.257,20.1,0.1506,1],[1964.408,20.2,0.1561,1],[1964.564,20.68,0.7858,1],[1965.348,21.52,1.9576,1],[1967.307,21.78,6.0342,1],[1973.339,21.82,0.7639,1],[1974.104,22.02,1.2485,1],[1975.353,22.86,12.2574,1],[1987.611,22.91,0.7775,1],[1988.389,23.06,1.9932,1],[1990.381,23.12,31.0801,1],[2021.46,23.37,1.9384,1],[2023.4,23.56,3.0992,0]]};
-  // label, record, age in years at the July 2026 run, from tables/current_record_vulnerability.csv
-  var STAND = [["Marathon","2:00:35",2.7324],["High jump (W)","2.10 m",1.9849],["Shot put","23.56 m",3.0992],
-    ["10,000 m","26:11.00",5.7331],["5000 m","12:35.36",5.8809],["800 m","1:40.91",13.8946],
-    ["100 m","9.58 s",16.8761],["1500 m","3:26.00",27.9671],["800 m (W)","1:53.28",42.935]];
-  var NAMES = {"100m":"100 m","800m":"800 m","1500m":"1500 m","5000m":"5000 m","10000m":"10,000 m",
-    "marathon":"Marathon","shot_put":"Shot put","high_jump_w":"High jump (W)","800m_w":"800 m (W)"};
-  var ORDER = ["100m","800m","1500m","5000m","10000m","marathon","shot_put","800m_w","high_jump_w"];
-  var DIST = {"shot_put":1,"high_jump_w":1};
   var NS = "http://www.w3.org/2000/svg";
   function el(tag, attrs, parent) {
     var e = document.createElementNS(NS, tag);
@@ -589,182 +664,218 @@
     return e;
   }
   function txt(s, attrs, parent) { var t = el("text", attrs, parent); t.textContent = s; return t; }
+  function pct(v) { return Math.round(v * 100) + "%"; }
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function done(scope) { (scope || document).querySelectorAll("[data-loading]").forEach(function (n) { n.remove(); }); }
+  function markValue(m) {
+    var s = String(m), p = s.split(":"), v = 0;
+    for (var i = 0; i < p.length; i++) v = v * 60 + parseFloat(p[i]);
+    return v;
+  }
+  function fmtDate(iso) {
+    var d = new Date(iso.slice(0, 10) + "T00:00:00Z");
+    return d.getUTCDate() + " " + ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][d.getUTCMonth()] + " " + d.getUTCFullYear();
+  }
 
-  // Kaplan-Meier product-limit estimate
-  var all = [], pre = [], post = [];
-  Object.keys(R).forEach(function (e) {
-    R[e].forEach(function (r) {
-      var o = { t: r[2], d: r[3] };
-      all.push(o); (Math.floor(r[0]) < 1980 ? pre : post).push(o);
+  fetch("../web/data.json").then(function (r) { return r.json(); }).then(function (D) {
+    watchlist(D); backtest(D); groups(D); model(D);
+  }).catch(function () {
+    document.querySelectorAll("[data-loading]").forEach(function (n) {
+      n.outerHTML = '<p class="readout">The data file did not load. It is in the repo at web/data.json.</p>';
     });
   });
-  function km(rows) {
-    var ts = [];
-    rows.forEach(function (r) { if (r.d && ts.indexOf(r.t) < 0) ts.push(r.t); });
-    ts.sort(function (a, b) { return a - b; });
-    var S = 1, pts = [[0, 1]];
-    ts.forEach(function (u) {
-      var n = 0, d = 0;
-      rows.forEach(function (r) { if (r.t >= u) n++; if (r.t === u && r.d) d++; });
-      S *= 1 - d / n; pts.push([u, S]);
-    });
-    var med = null;
-    for (var i = 0; i < pts.length; i++) if (pts[i][1] <= 0.5 + 1e-9) { med = pts[i][0]; break; }
-    return { pts: pts, n: rows.length, med: med };
-  }
-  function S(c, x) { var s = 1; for (var i = 0; i < c.pts.length; i++) { if (c.pts[i][0] <= x) s = c.pts[i][1]; else break; } return s; }
-  function p5(c, t) { return 1 - S(c, t + 5) / S(c, t); }
-  var CA = km(all), CPRE = km(pre), CPOST = km(post);
 
-  var mode = "all", age = STAND[0][2];
-  var box = document.getElementById("hl-km"), slider = document.getElementById("hl-age"),
-      out = document.getElementById("hl-age-out"), read = document.getElementById("hl-read");
-  var TMAX = 56, TICKS = [0, 0.5, 1, 2, 5, 10, 20, 40];
-  var geo = null;
-
-  function pct(v) { return Math.round(v * 100) + "%"; }
-  function draw() {
-    var W = Math.max(300, box.clientWidth), small = W < 560;
-    var m = { l: 40, r: small ? 14 : 24, t: 16, b: 40 };
-    var H = small ? 300 : 380, pw = W - m.l - m.r, ph = H - m.t - m.b;
-    var X = function (t) { return m.l + Math.sqrt(Math.max(0, t) / TMAX) * pw; };
-    var Y = function (s) { return m.t + (1 - s) * ph; };
-    geo = { m: m, pw: pw, X: X };
-    box.textContent = "";
-    var svg = el("svg", { viewBox: "0 0 " + W + " " + H, role: "img",
-      "aria-label": "Kaplan-Meier survival curve of world records. Half have fallen by 1.5 years; the curve then flattens into a long tail." }, box);
-    [0, 0.25, 0.5, 0.75, 1].forEach(function (s) {
-      el("line", { x1: m.l, x2: m.l + pw, y1: Y(s), y2: Y(s), "class": s === 0.5 ? "half" : "grid" }, svg);
-      txt(pct(s), { x: m.l - 8, y: Y(s) + 4, "text-anchor": "end" }, svg);
-    });
-    TICKS.forEach(function (t) {
-      el("line", { x1: X(t), x2: X(t), y1: m.t + ph, y2: m.t + ph + 5, "class": "axis" }, svg);
-      if (!(small && t === 0.5)) txt(String(t), { x: X(t), y: m.t + ph + 19, "text-anchor": "middle" }, svg);
-    });
-    txt("Years since the record was set", { x: m.l + pw, y: H - 4, "text-anchor": "end" }, svg);
-    var t1 = Math.min(age + 5, TMAX);
-    el("rect", { x: X(age), y: m.t, width: X(t1) - X(age), height: ph, "class": "band" }, svg);
-    function path(c, cls) {
-      var d = "M" + X(0) + "," + Y(1), last = 1;
-      c.pts.forEach(function (p) { d += "H" + X(p[0]).toFixed(1) + "V" + Y(p[1]).toFixed(1); last = p[1]; });
-      d += "H" + X(TMAX);
-      el("path", { d: d, "class": cls }, svg);
-    }
-    if (mode === "all") {
-      path(CA, "c-all");
-      txt("All 248 records", { x: X(9), y: Y(S(CA, 9)) - 10, "class": "lbl t-all" }, svg);
-      txt("half fallen by " + CA.med.toFixed(1) + " yr", { x: X(CA.med) + 6, y: Y(0.5) - 7 }, svg);
-      STAND.forEach(function (s) { el("circle", { cx: X(s[2]), cy: Y(S(CA, s[2])), r: 3.2, "class": "rec" }, svg); });
-      [age, t1].forEach(function (t) { el("circle", { cx: X(t), cy: Y(S(CA, t)), r: 5, "class": "pt" }, svg); });
-    } else {
-      path(CPRE, "c-pre"); path(CPOST, "c-post");
-      txt("1980 on (" + CPOST.n + ")", { x: X(7), y: Y(S(CPOST, 7)) - 10, "class": "lbl t-post" }, svg);
-      txt("Before 1980 (" + CPRE.n + ")", { x: X(2.2), y: Y(S(CPRE, 2.2)) + 20, "class": "lbl t-pre" }, svg);
-      [CPRE, CPOST].forEach(function (c) {
-        [age, t1].forEach(function (t) { el("circle", { cx: X(t), cy: Y(S(c, t)), r: 4.5, "class": "pt" }, svg); });
+  // ---------------------------------------------------------------- watchlist
+  function watchlist(D) {
+    var rows = D.watchlist.map(function (r) { r.value = markValue(r.mark); return r; });
+    var body = document.getElementById("wl-body"), table = document.getElementById("wl-table");
+    var key = "p_la28", dir = -1, sex = "all";
+    function render() {
+      var list = rows.filter(function (r) { return sex === "all" || r.sex === sex; });
+      list.sort(function (a, b) {
+        var x = a[key], y = b[key];
+        if (typeof x === "string") return dir * x.localeCompare(y);
+        return dir * (x - y);
+      });
+      body.innerHTML = list.map(function (r) {
+        var who = r.sex === "W" ? "Women" : "Men";
+        var pend = r.pending_mark ? '<small class="pending">Pending: ' + esc(r.pending_mark) + " by " + esc(r.pending_athlete) + "</small>" : "";
+        var lo = r.p_la28_lo * 100, hi = r.p_la28_hi * 100;
+        return "<tr><td class=\"ev\">" + esc(r.label) + "<small>" + who + "</small>" +
+          "<small class=\"mob\">" + esc(r.athlete) + ", " + fmtDate(r.date_set) + "</small>" + pend + "</td>" +
+          "<td class=\"mk\">" + esc(r.mark) + "</td>" +
+          "<td class=\"c-h\">" + esc(r.athlete) + "<small>" + esc(r.country) + "</small></td>" +
+          "<td class=\"dt c-d\">" + fmtDate(r.date_set) + "</td>" +
+          "<td class=\"num c-a\">" + r.age_years.toFixed(1) + "</td>" +
+          "<td class=\"num\"><span class=\"pc\">" + pct(r.p_la28) + "</span><small>" + Math.round(lo) + " to " + Math.round(hi) + "%</small>" +
+          "<div class=\"pbar\" aria-hidden=\"true\"><i style=\"width:" + (r.p_la28 * 100).toFixed(1) + "%\"></i><b style=\"left:" + lo.toFixed(1) + "%;width:" + Math.max(1, hi - lo).toFixed(1) + "%\"></b></div></td>" +
+          "<td class=\"num\"><span class=\"pc\">" + pct(r.p_5yr) + "</span><small>" + Math.round(r.p_5yr_lo * 100) + " to " + Math.round(r.p_5yr_hi * 100) + "%</small></td></tr>";
+      }).join("");
+      table.querySelectorAll("th").forEach(function (th) {
+        var b = th.querySelector("button");
+        th.setAttribute("aria-sort", b.dataset.k === key ? (dir > 0 ? "ascending" : "descending") : "none");
       });
     }
-    el("line", { x1: X(age), x2: X(age), y1: m.t, y2: m.t + ph, "class": "cursor" }, svg);
-    var hit = el("rect", { x: m.l, y: m.t, width: pw, height: ph, fill: "transparent" }, svg);
-    hit.addEventListener("pointermove", function (ev) {
-      var r = svg.getBoundingClientRect(), x = (ev.clientX - r.left) * (W / r.width);
-      var f = Math.min(1, Math.max(0, (x - m.l) / pw)), t = f * f * TMAX;
-      setAge(Math.min(50, Math.round(t * 10) / 10));
+    table.querySelectorAll("th button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (key === b.dataset.k) dir = -dir;
+        else { key = b.dataset.k; dir = (key === "label" || key === "athlete" || key === "date_set") ? 1 : -1; }
+        render();
+      });
     });
+    document.querySelectorAll("[data-sex]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        sex = b.dataset.sex;
+        document.querySelectorAll("[data-sex]").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+        render();
+      });
+    });
+    done(table.parentNode); table.hidden = false; render();
   }
-  function readout() {
-    out.textContent = age.toFixed(1) + " yr";
-    var h;
-    if (mode === "all") {
-      h = "A record that has stood " + age.toFixed(1) + " years has outlasted " + pct(1 - S(CA, age)) +
-          " of all records. Chance it falls in the next five years: <b>" + pct(p5(CA, age)) + "</b>";
-    } else {
-      h = "Chance of falling in the next five years, for a record " + age.toFixed(1) +
-          " years old: <b>" + pct(p5(CPRE, age)) + "</b> if set before 1980, <b>" + pct(p5(CPOST, age)) + "</b> if set in 1980 or later";
-      var lastPost = CPOST.pts[CPOST.pts.length - 1][0];
-      if (age > lastPost) h += ". No reign that began in 1980 or later has ended after " + lastPost.toFixed(1) + " years, so the second figure has no data behind it";
-    }
-    read.innerHTML = h + ".";
-    jumpBtns.forEach(function (b) { b.setAttribute("aria-pressed", String(Math.abs(+b.dataset.age - age) < 1e-6)); });
-  }
-  function setAge(a) { age = a; slider.value = a; draw(); readout(); }
-  var jl = document.getElementById("hl-jump"), jumpBtns = [];
-  STAND.forEach(function (s) {
-    var li = document.createElement("li"), b = document.createElement("button");
-    b.type = "button"; b.dataset.age = s[2];
-    b.textContent = s[0] + " " + s[1] + ", " + s[2].toFixed(1) + " yr";
-    b.addEventListener("click", function () { if (mode !== "all") setMode("all"); setAge(+b.dataset.age); });
-    li.appendChild(b); jl.appendChild(li); jumpBtns.push(b);
-  });
-  function setMode(md) {
-    mode = md;
-    document.querySelectorAll("[data-mode]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.mode === md)); });
-    draw(); readout();
-  }
-  document.querySelectorAll("[data-mode]").forEach(function (b) { b.addEventListener("click", function () { setMode(b.dataset.mode); }); });
-  slider.addEventListener("input", function () { age = +slider.value; draw(); readout(); });
 
-  // progression small multiples
-  function fmt(e, v) {
-    if (DIST[e]) return v.toFixed(2) + " m";
-    if (v >= 3600) { var h = Math.floor(v / 3600), mm = Math.floor((v % 3600) / 60), ss = v % 60;
-      return h + ":" + String(mm).padStart(2, "0") + ":" + (ss < 10 ? "0" : "") + ss.toFixed(ss % 1 ? 1 : 0); }
-    if (v >= 60) { var m2 = Math.floor(v / 60), s2 = v - m2 * 60; return m2 + ":" + (s2 < 10 ? "0" : "") + s2.toFixed(2); }
-    return v.toFixed(2) + " s";
+  // ---------------------------------------------------------------- backtest
+  function backtest(D) {
+    var S = D.backtest.summary, t10 = S[0], t00 = S[1], tr = S[2];
+    var methods = [["model", "Frailty Weibull (final)"], ["model_v2", "Frailty Weibull, calendar period only"],
+                   ["model_v1", "Frailty Weibull, era set (first version)"], ["km", "Kaplan-Meier method (July 2026)"],
+                   ["clim", "Base rate"], ["baseline", "Pooled constant rate"]];
+    var best = {};
+    ["brier"].forEach(function () {
+      [t10, t00, tr].forEach(function (t, i) {
+        var m = Infinity; methods.forEach(function (mm) { m = Math.min(m, t["brier_" + mm[0]]); }); best[i] = m;
+      });
+    });
+    function cell(t, i, k) { var v = t["brier_" + k]; return "<td" + (Math.abs(v - best[i]) < 1e-9 ? " class=\"best\"" : "") + ">" + v.toFixed(3) + "</td>"; }
+    function auc(v) { return "<td>" + (v === 0.5 ? "0.50" : v.toFixed(2)) + "</td>"; }
+    document.getElementById("bt-body").innerHTML = methods.map(function (m) {
+      return "<tr><td>" + m[1] + "</td>" + cell(t10, 0, m[0]) + auc(t10["auc_" + m[0]]) + cell(t00, 1, m[0]) + cell(tr, 2, m[0]) + auc(tr["auc_" + m[0]]) + "</tr>";
+    }).join("");
+    var bt = document.getElementById("bt-table"); done(bt.parentNode); bt.hidden = false;
+
+    // biggest misses at the 2010 cut
+    var y = D.backtest.y2010.slice();
+    var held = y.filter(function (r) { return !r.fell; }).sort(function (a, b) { return b.p_model - a.p_model; }).slice(0, 2);
+    var fell = y.filter(function (r) { return r.fell; }).sort(function (a, b) { return a.p_model - b.p_model; }).slice(0, 2);
+    var nm = function (r) { return r.athlete + "'s " + r.mark + " (" + r.date_set.slice(0, 4) + ")"; };
+    document.getElementById("bt-miss").innerHTML =
+      held.map(function (r) { return "<li><b>Gave " + pct(r.p_model) + ", still standing.</b> " + esc(nm(r)) + "</li>"; }).join("") +
+      fell.map(function (r) { return "<li><b>Gave " + pct(r.p_model) + ", fell " + String(r.fell_on).slice(0, 4) + ".</b> " + esc(nm(r)) + "</li>"; }).join("");
+
+    // reliability chart
+    var box = document.getElementById("rel-chart"), read = document.getElementById("rel-read"), mode = "rolling";
+    function draw() {
+      var data = mode === "rolling" ? [D.backtest.rel_rolling, D.backtest.rel_rolling_km] : [D.backtest.rel2010, null];
+      var W = Math.max(300, box.clientWidth - 20), H = Math.min(420, Math.round(W * 0.72)), m = { l: 44, r: 16, t: 14, b: 42 };
+      var pw = W - m.l - m.r, ph = H - m.t - m.b;
+      var X = function (v) { return m.l + v * pw; }, Y = function (v) { return m.t + (1 - v) * ph; };
+      box.textContent = "";
+      var svg = el("svg", { viewBox: "0 0 " + W + " " + H, role: "img",
+        "aria-label": "Reliability of the backtest: predicted chance of falling against the share that fell. Above 40 percent predicted, the share that fell is well below the prediction." }, box);
+      [0, .25, .5, .75, 1].forEach(function (v) {
+        el("line", { x1: m.l, x2: m.l + pw, y1: Y(v), y2: Y(v), "class": "grid" }, svg);
+        txt(pct(v), { x: m.l - 8, y: Y(v) + 4, "text-anchor": "end" }, svg);
+        txt(pct(v), { x: X(v), y: m.t + ph + 18, "text-anchor": "middle" }, svg);
+      });
+      el("line", { x1: X(0), y1: Y(0), x2: X(1), y2: Y(1), "class": "diag" }, svg);
+      txt("Predicted chance of falling", { x: m.l + pw, y: H - 4, "text-anchor": "end" }, svg);
+      txt("Share that fell", { x: m.l + 4, y: m.t + 12 }, svg);
+      [[data[1], "b"], [data[0], "m"]].forEach(function (pair) {
+        var d = pair[0]; if (!d) return;
+        var pts = d.filter(function (r) { return r.n > 0 && r.predicted != null; });
+        el("path", { d: "M" + pts.map(function (r) { return X(r.predicted).toFixed(1) + "," + Y(r.observed).toFixed(1); }).join("L"), "class": "ln " + pair[1] }, svg);
+        pts.forEach(function (r) {
+          var c = el("circle", { cx: X(r.predicted), cy: Y(r.observed), r: Math.max(4, Math.min(11, Math.sqrt(r.n) * 0.6)),
+            "class": "pt " + pair[1], tabindex: "0", role: "button",
+            "aria-label": (pair[1] === "m" ? "Model" : "Kaplan-Meier method") + ", bin " + r.bin + ": predicted " + pct(r.predicted) + ", fell " + pct(r.observed) + ", " + r.n + " predictions" }, svg);
+          var say = function () {
+            read.innerHTML = "<b>" + (pair[1] === "m" ? "Model" : "Kaplan-Meier method") + ", " + r.bin + " bin:</b> " + r.n +
+              " predictions averaging " + pct(r.predicted) + "; " + pct(r.observed) + " of those records fell.";
+          };
+          c.addEventListener("pointerenter", say); c.addEventListener("focus", say);
+        });
+      });
+      if (!read.textContent) read.textContent = "Hover or focus a point to read its bin.";
+    }
+    document.querySelectorAll("[data-rel]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        mode = b.dataset.rel; read.textContent = "";
+        document.querySelectorAll("[data-rel]").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+        draw();
+      });
+    });
+    draw();
+    var rt; window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(draw, 150); });
   }
-  var smBox = document.getElementById("hl-sm"), panels = [];
-  ORDER.forEach(function (e) {
-    var fig = document.createElement("div"); fig.className = "sm";
-    var rows = R[e];
-    fig.innerHTML = "<h3>" + NAMES[e] + "<span>" + rows.length + " records</span></h3><div class=\"chart\"></div><p class=\"smro\" aria-live=\"polite\"></p>";
-    smBox.appendChild(fig);
-    panels.push({ e: e, rows: rows, box: fig.querySelector(".chart"), ro: fig.querySelector(".smro"), i: rows.length - 1 });
-  });
-  function drawPanel(P) {
-    var W = Math.max(200, P.box.clientWidth), H = 130, m = { l: 4, r: 6, t: 8, b: 20 };
-    var pw = W - m.l - m.r, ph = H - m.t - m.b, x0 = 1896, x1 = 2026.6;
-    var vals = P.rows.map(function (r) { return r[1]; }), lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
-    var better = DIST[P.e] ? function (v) { return (v - lo) / (hi - lo); } : function (v) { return (hi - v) / (hi - lo); };
-    var X = function (y) { return m.l + (y - x0) / (x1 - x0) * pw; }, Y = function (v) { return m.t + (1 - better(v)) * ph; };
-    P.box.textContent = "";
-    var first = P.rows[0], last = P.rows[P.rows.length - 1];
-    var svg = el("svg", { viewBox: "0 0 " + W + " " + H, tabindex: "0", role: "img",
-      "aria-label": NAMES[P.e] + " world-record progression, " + P.rows.length + " records from " + fmt(P.e, first[1]) +
-      " in " + Math.floor(first[0]) + " to " + fmt(P.e, last[1]) + " in " + Math.floor(last[0]) + ". Use left and right arrow keys to step through the records." }, P.box);
-    [1900, 1950, 2000].forEach(function (y) {
-      el("line", { x1: X(y), x2: X(y), y1: m.t, y2: m.t + ph, "class": "grid" }, svg);
-      txt(String(y), { x: X(y), y: H - 4, "text-anchor": "middle" }, svg);
+
+  // ---------------------------------------------------------------- survival by group
+  function groups(D) {
+    var order = ["sprint", "middle", "distance", "road", "walk", "hurdles", "relay", "jumps", "throws", "combined"];
+    var seg = document.getElementById("grp-seg"), box = document.getElementById("grp-chart"), read = document.getElementById("grp-read");
+    var cur = "sprint", TMAX = 45, TICKS = [0, 0.5, 1, 2, 5, 10, 20, 40];
+    order.forEach(function (g) {
+      var b = document.createElement("button");
+      b.type = "button"; b.textContent = D.curves[g].label; b.dataset.g = g;
+      b.setAttribute("aria-pressed", String(g === cur));
+      b.addEventListener("click", function () {
+        cur = g; seg.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); draw();
+      });
+      seg.appendChild(b);
     });
-    el("line", { x1: m.l, x2: m.l + pw, y1: m.t + ph, y2: m.t + ph, "class": "axis" }, svg);
-    var d = "";
-    P.rows.forEach(function (r, i) {
-      var end = i + 1 < P.rows.length ? P.rows[i + 1][0] : x1;
-      d += (i ? "V" : "M" + X(r[0]).toFixed(1) + ",") + Y(r[1]).toFixed(1) + "H" + X(end).toFixed(1);
-    });
-    el("path", { d: d, "class": "step" }, svg);
-    P.rows.forEach(function (r, i) {
-      el("circle", { cx: X(r[0]), cy: Y(r[1]), r: i === P.i ? 4.6 : 2.6,
-        "class": "dot" + (r[3] ? "" : " open") + (i === P.i ? " hi" : "") }, svg);
-    });
-    var r = P.rows[P.i];
-    P.ro.textContent = fmt(P.e, r[1]) + ", " + Math.floor(r[0]) + ". " +
-      (r[3] ? "Stood " + (r[2] < 1 ? Math.round(r[2] * 12) + " months" : r[2].toFixed(1) + " years") + "." : "Still standing.");
-    svg.addEventListener("pointermove", function (ev) {
-      var b = svg.getBoundingClientRect(), x = (ev.clientX - b.left) * (W / b.width), best = 0, bd = 1e9;
-      P.rows.forEach(function (q, j) { var dd = Math.abs(X(q[0]) - x); if (dd < bd) { bd = dd; best = j; } });
-      if (best !== P.i) { P.i = best; drawPanel(P); }
-    });
-    svg.addEventListener("keydown", function (ev) {
-      var k = ev.key, n = P.i;
-      if (k === "ArrowRight" || k === "ArrowUp") n = Math.min(P.rows.length - 1, P.i + 1);
-      else if (k === "ArrowLeft" || k === "ArrowDown") n = Math.max(0, P.i - 1);
-      else if (k === "Home") n = 0; else if (k === "End") n = P.rows.length - 1; else return;
-      ev.preventDefault(); P.i = n; drawPanel(P); P.box.querySelector("svg").focus();
-    });
+    function S(pts, x) { var s = 1; for (var i = 0; i < pts.length; i++) { if (pts[i][0] <= x) s = pts[i][1]; else break; } return s; }
+    function draw() {
+      var C = D.curves[cur];
+      var W = Math.max(300, box.clientWidth - 20), small = W < 560, H = small ? 300 : 380, m = { l: 42, r: small ? 12 : 22, t: 14, b: 40 };
+      var pw = W - m.l - m.r, ph = H - m.t - m.b;
+      var X = function (t) { return m.l + Math.sqrt(Math.max(0, t) / TMAX) * pw; }, Y = function (s) { return m.t + (1 - s) * ph; };
+      box.textContent = "";
+      var svg = el("svg", { viewBox: "0 0 " + W + " " + H, role: "img",
+        "aria-label": C.label + ": Kaplan-Meier survival of " + C.n + " record reigns" + (C.median != null ? ", median " + C.median.toFixed(1) + " years" : "") + ", with the model curve." }, svg = null);
+      box.appendChild(svg);
+      [0, .25, .5, .75, 1].forEach(function (s) {
+        el("line", { x1: m.l, x2: m.l + pw, y1: Y(s), y2: Y(s), "class": s === .5 ? "half" : "grid" }, svg);
+        txt(pct(s), { x: m.l - 8, y: Y(s) + 4, "text-anchor": "end" }, svg);
+      });
+      TICKS.forEach(function (t) {
+        el("line", { x1: X(t), x2: X(t), y1: m.t + ph, y2: m.t + ph + 5, "class": "axis" }, svg);
+        if (!(small && t === 0.5)) txt(String(t), { x: X(t), y: m.t + ph + 19, "text-anchor": "middle" }, svg);
+      });
+      txt("Years since the record was set", { x: m.l + pw, y: H - 4, "text-anchor": "end" }, svg);
+      var d = "M" + X(0) + "," + Y(1);
+      C.km.forEach(function (p) { if (p[0] <= TMAX) d += "H" + X(p[0]).toFixed(1) + "V" + Y(p[1]).toFixed(1); });
+      el("path", { d: d, "class": "km" }, svg);
+      el("path", { d: "M" + C.model.filter(function (p) { return p[0] <= TMAX; }).map(function (p) { return X(p[0]).toFixed(1) + "," + Y(p[1]).toFixed(1); }).join("L"), "class": "mod" }, svg);
+      var st = D.standing[cur] || [];
+      st.forEach(function (s) { el("circle", { cx: X(Math.min(s[2], TMAX)), cy: Y(S(C.km, s[2])), r: 3.4, "class": "rec" }, svg); });
+      txt("Data", { x: X(0.3), y: Y(S(C.km, 0.3)) + 18, "class": "lbl t-km" }, svg);
+      txt("Model, record set today", { x: X(8), y: Y(C.model.filter(function (p) { return p[0] >= 8; })[0][1]) - 10, "class": "lbl t-mod" }, svg);
+      read.innerHTML = "<b>" + C.label + ":</b> " + C.n + " reigns, " + C.broken + " ended by a new record. " +
+        (C.median != null ? "Median reign " + C.median.toFixed(1) + " years. " : "") +
+        (st.length ? "Standing: " + st.map(function (s) { return s[0] + " " + s[1] + " (" + s[2].toFixed(0) + " yr)"; }).join(", ") + "." : "");
+    }
+    done(box); draw();
+    var rt; window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(draw, 150); });
   }
-  function drawAll() { draw(); readout(); panels.forEach(drawPanel); }
-  var rt; window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(drawAll, 120); });
-  drawAll();
+
+  // ---------------------------------------------------------------- model tables
+  function model(D) {
+    var names = { women: ["Women's event", "Women's records fall faster"], improve_pct: ["Improvement over previous record, per % point", "Big margins last longer"],
+      first_in_chain: ["First record of a list", "Fewer people chasing"], self_break: ["Set by the previous holder", "Slightly longer-lived"],
+      g_middle: ["Middle distance (against sprints)", ""], g_distance: ["Long distance, steeple, road and walk", ""], g_hurdles: ["Hurdles", ""],
+      g_relay: ["Relays", ""], g_jumps: ["Jumps", "About twice the sprint rate"], g_throws: ["Throws", "About twice the sprint rate"],
+      g_combined: ["Combined events", ""], cal_1950: ["At risk in 1950 to 1979 (against before 1950)", ""],
+      cal_1980: ["At risk in 1980 to 1999", ""], cal_2000: ["At risk since 2000", "About half the earlier rate"],
+      momentum: ["Recent records in the event (log count, 3 years)", "Busy events stay busy"] };
+    document.getElementById("hr-body").innerHTML = D.model.params.filter(function (p) { return p.hr != null; }).map(function (p) {
+      var n = names[p.param] || [p.param, ""];
+      var sig = p.hr_lo95 > 1 || p.hr_hi95 < 1;
+      return "<tr" + (sig ? " class=\"win\"" : "") + "><td>" + n[0] + "</td><td>" + p.hr.toFixed(2) + "</td><td>" + p.hr_lo95.toFixed(2) + " to " + p.hr_hi95.toFixed(2) + "</td><td>" + n[1] + "</td></tr>";
+    }).join("");
+    var h = document.getElementById("hr-table"); done(h.parentNode); h.hidden = false;
+    document.getElementById("aic-body").innerHTML = D.comparison.map(function (c) {
+      return "<tr><td>" + esc(c.model) + "</td><td>" + c.params + "</td><td>" + c.log_lik.toFixed(1) + "</td><td>" + c.delta_aic.toFixed(1) + "</td></tr>";
+    }).join("");
+    var a = document.getElementById("aic-table"); done(a.parentNode); a.hidden = false;
+  }
 })();
 </script>
 </body>

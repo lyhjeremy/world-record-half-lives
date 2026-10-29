@@ -1,0 +1,31 @@
+sex,event,group,mark,value,athlete,country,venue,date,indoor,status,source
+M,pv,jumps,6.21,6.21,Armand Duplantis,SWE,"Eugene, OR",2022-07-24,False,ratified,https://worldathletics.org/records/by-progression/15143
+M,pv,jumps,6.22,6.22,Armand Duplantis,SWE,Clermont-Ferrand,2023-02-25,True,ratified,https://worldathletics.org/records/by-progression/15143
+M,pv,jumps,6.23,6.23,Armand Duplantis,SWE,"Eugene, OR",2023-09-17,False,ratified,https://worldathletics.org/records/by-progression/15143
+M,pv,jumps,6.24,6.24,Armand Duplantis,SWE,Xiamen,2024-04-20,False,ratified,https://worldathletics.org/records/by-progression/15143
+M,pv,jumps,6.25,6.25,Armand Duplantis,SWE,Paris,2024-08-05,False,ratified,https://worldathletics.org/records/by-progression/15143
+M,pv,jumps,6.26,6.26,Armand Duplantis,SWE,Chorzów,2024-08-25,False,ratified,https://worldathletics.org/records/by-progression/15143
+M,pv,jumps,6.27,6.27,Armand Duplantis,SWE,Clermont-Ferrand,2025-02-28,True,ratified,https://worldathletics.org/records/by-progression/15143
+M,pv,jumps,6.28,6.28,Armand Duplantis,SWE,Stockholm,2025-06-15,False,ratified,https://worldathletics.org/records/by-progression/15143
+M,pv,jumps,6.29,6.29,Armand Duplantis,SWE,Budapest,2025-08-12,False,ratified,https://worldathletics.org/records/by-progression/15143
+M,pv,jumps,6.30,6.30,Armand Duplantis,SWE,Tokyo,2025-09-15,False,ratified,https://worldathletics.org/records/by-progression/15143
+M,pv,jumps,6.31,6.31,Armand Duplantis,SWE,Uppsala,2026-03-12,True,ratified,https://worldathletics.org/records/by-progression/15143
+M,110h,hurdles,12.75,12.75,Ja'Kobe Tharp,USA,"Eugene, OR",2026-06-10,False,ratified,https://worldathletics.org/records/by-progression/14252
+M,3000sc,distance,7:52.11,472.11,Lamecha Girma,ETH,Paris,2023-06-09,False,ratified,https://worldathletics.org/records/by-progression/14756
+M,sp,throws,23.56,23.56,Ryan Crouser,USA,"Los Angeles, CA",2023-05-27,False,ratified,https://worldathletics.org/records/by-progression/15758
+M,dt,throws,74.35,74.35,Mykolas Alekna,LTU,"Ramona, OK",2024-04-14,False,ratified,https://worldathletics.org/records/by-progression/15939
+M,dt,throws,74.89,74.89,Mykolas Alekna,LTU,"Ramona, OK",2025-04-13,False,ratified,https://worldathletics.org/records/by-progression/15939
+M,dt,throws,75.56,75.56,Mykolas Alekna,LTU,"Ramona, OK",2025-04-13,False,ratified,https://worldathletics.org/records/by-progression/15939
+W,1500m,middle,3:49.11,229.11,Faith Kipyegon,KEN,Firenze,2023-06-02,False,ratified,https://worldathletics.org/records/by-progression/3016
+W,1500m,middle,3:49.04,229.04,Faith Kipyegon,KEN,Paris,2024-07-07,False,ratified,https://worldathletics.org/records/by-progression/3016
+W,1500m,middle,3:48.68,228.68,Faith Kipyegon,KEN,"Eugene, OR",2025-07-05,False,ratified,https://worldathletics.org/records/by-progression/3016
+W,5000m,distance,14:05.20,845.20,Faith Kipyegon,KEN,Paris,2023-06-09,False,ratified,https://worldathletics.org/records/by-progression/3241
+W,5000m,distance,14:00.21,840.21,Gudaf Tsegay,ETH,"Eugene, OR",2023-09-17,False,ratified,https://worldathletics.org/records/by-progression/3241
+W,5000m,distance,13:58.06,838.06,Beatrice Chebet,KEN,"Eugene, OR",2025-07-05,False,ratified,https://worldathletics.org/records/by-progression/3241
+W,10000m,distance,28:54.14,1734.14,Beatrice Chebet,KEN,"Eugene, OR",2024-05-25,False,ratified,https://worldathletics.org/records/by-progression/4005
+W,100h,hurdles,12.12,12.12,Tobi Amusan,NGR,"Eugene, OR",2022-07-24,False,ratified,https://worldathletics.org/records/by-progression/4154
+W,400h,hurdles,51.41,51.41,Sydney McLaughlin,USA,"Eugene, OR",2022-06-25,False,ratified,https://worldathletics.org/records/by-progression/4338
+W,400h,hurdles,50.68,50.68,Sydney McLaughlin,USA,"Eugene, OR",2022-07-22,False,ratified,https://worldathletics.org/records/by-progression/4338
+W,400h,hurdles,50.65,50.65,Sydney McLaughlin-Levrone,USA,"Eugene, OR",2024-06-30,False,ratified,https://worldathletics.org/records/by-progression/4338
+W,400h,hurdles,50.37,50.37,Sydney McLaughlin-Levrone,USA,Paris,2024-08-08,False,ratified,https://worldathletics.org/records/by-progression/4338
+W,hj,jumps,2.10,2.10,Yaroslava Mahuchikh,UKR,Paris,2024-07-07,False,ratified,https://worldathletics.org/records/by-progression/4789

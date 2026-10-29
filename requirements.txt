@@ -1,9 +1,10 @@
 # Data
 pandas>=2.0
-lxml>=4.9              # pandas.read_html parser for the Wikipedia progression tables
+lxml>=4.9              # pandas.read_html for the Wikipedia cross-check
+# pdftotext (poppler) must be on PATH for fetch_data.py: brew install poppler
 
 # Modeling
 numpy>=1.24
-scipy>=1.10            # asymptotic progression curve fitting
-lifelines>=0.27        # Kaplan-Meier + Cox proportional hazards
+scipy>=1.10            # frailty Weibull likelihood
+lifelines>=0.27        # Kaplan-Meier, Cox, AFT models
 matplotlib>=3.7

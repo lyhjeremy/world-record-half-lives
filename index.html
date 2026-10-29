@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>World-record half-lives: how long athletics records stand</title>
-<meta name="description" content="A survival analysis of 248 athletics world-record reigns: Kaplan-Meier puts the median reign at 1.5 years, a Cox model finds records set since 1980 fall at about half the rate, and each standing record gets a five-year fall probability.">
+<title>World-record half-lives: which records fall before LA 2028</title>
+<meta name="description" content="Every ratified world record in 46 Olympic athletics events, modeled as survival times, backtested from 2010, with each standing record's chance of falling before the LA 2028 Olympics close.">
 <link rel="stylesheet" href="assets/family.css">
 <style>
   * { box-sizing: border-box; border-radius: 0; }
@@ -49,66 +49,75 @@
   footer { border-top: 1px solid var(--rule); margin-top: 70px; padding: 22px 0 54px;
            font: 400 14.5px/1.6 var(--font-body); color: var(--ink-2); }
   footer a { color: var(--ink-2); }
+  .board small { display: block; font: 400 12.5px/1.3 var(--font-body); color: color-mix(in srgb, var(--paper) 70%, var(--ink)); }
 </style>
 </head>
 <body>
 <a class="bar-link" href="overview/" data-overview-link>Read the full writeup&nbsp;&rarr;</a>
 
 <header class="wrap">
-  <div class="mast"><span>World-record half-lives</span><span>Kaplan-Meier · Cox · 248 reigns</span></div>
-  <h1>Half of all world records fall within 1.5 years</h1>
-  <p class="lede">I treated every athletics world record as a survival time. It starts the day it is
-  set, ends the day it is broken, and the nine records standing today are right-censored. On
-  248 reigns across nine events, Kaplan-Meier gives the median reign, a Cox model says what makes
-  a record last, and the curve gives each standing record a chance of falling in the next five years.</p>
+  <div class="mast"><span>World-record half-lives</span><span>46 events · 1,251 reigns · October 2026</span></div>
+  <h1>Which world records fall before LA 2028</h1>
+  <p class="lede">I treated every ratified athletics world record in the 46 Olympic events as a survival
+  time: it starts the day it is set and ends the day it is broken. The records come from World
+  Athletics' own progression lists, checked against its records page on 28 October 2026. A model fitted
+  on what was known at the end of 2010 beat the historical base rate on what happened next, and here is
+  what it says about the 21 months to the LA 2028 Olympics.</p>
 </header>
 
 <main class="wrap">
-  <div class="board" role="region" aria-label="Standing world records and their five-year fall probability" tabindex="0">
-    <div class="board-head"><span>Standing records</span><span>Chance of falling within 5 years</span></div>
+  <div class="board" role="region" aria-label="The ten standing records most likely to fall before the LA 2028 Olympics close" tabindex="0">
+    <div class="board-head"><span>Most likely to fall</span><span>Before 30 July 2028</span></div>
     <table>
-      <tr><td>1</td><td>Marathon</td><td class="mark">2:00:35</td><td class="yr">2023</td><td class="p">60%</td></tr>
-      <tr><td>2</td><td>High jump (W)</td><td class="mark">2.10 m</td><td class="yr">2024</td><td class="p">59%</td></tr>
-      <tr><td>3</td><td>Shot put</td><td class="mark">23.56 m</td><td class="yr">2023</td><td class="p">57%</td></tr>
-      <tr><td>4</td><td>10,000 m</td><td class="mark">26:11.00</td><td class="yr">2020</td><td class="p">52%</td></tr>
-      <tr><td>5</td><td>5000 m</td><td class="mark">12:35.36</td><td class="yr">2020</td><td class="p">51%</td></tr>
-      <tr><td>6</td><td>800 m</td><td class="mark">1:40.91</td><td class="yr">2012</td><td class="p">44%</td></tr>
-      <tr><td>7</td><td>100 m</td><td class="mark">9.58 s</td><td class="yr">2009</td><td class="p">37%</td></tr>
-      <tr><td>8</td><td>1500 m</td><td class="mark">3:26.00</td><td class="yr">1998</td><td class="p">25%</td></tr>
-      <tr><td>9</td><td>800 m (W)</td><td class="mark">1:53.28</td><td class="yr">1983</td><td class="p">0%</td></tr>
+      <tr><td>1</td><td>Pole vault<small>Duplantis, men</small></td><td class="mark">6.31</td><td class="yr">2026</td><td class="p">48%</td></tr>
+      <tr><td>2</td><td>5000 m<small>Chebet, women</small></td><td class="mark">13:58.06</td><td class="yr">2025</td><td class="p">35%</td></tr>
+      <tr><td>3</td><td>10,000 m<small>Chebet, women</small></td><td class="mark">28:54.14</td><td class="yr">2024</td><td class="p">29%</td></tr>
+      <tr><td>4</td><td>Marathon<small>Sawe, men</small></td><td class="mark">1:59:30</td><td class="yr">2026</td><td class="p">29%</td></tr>
+      <tr><td>5</td><td>High jump<small>Mahuchikh, women</small></td><td class="mark">2.10</td><td class="yr">2024</td><td class="p">28%</td></tr>
+      <tr><td>6</td><td>Pole vault<small>Isinbayeva, women</small></td><td class="mark">5.06</td><td class="yr">2009</td><td class="p">28%</td></tr>
+      <tr><td>7</td><td>Discus<small>Alekna, men</small></td><td class="mark">75.56</td><td class="yr">2025</td><td class="p">27%</td></tr>
+      <tr><td>8</td><td>1500 m<small>Kipyegon, women</small></td><td class="mark">3:48.68</td><td class="yr">2025</td><td class="p">25%</td></tr>
+      <tr><td>9</td><td>Marathon<small>Chepngetich, women</small></td><td class="mark">2:09:56</td><td class="yr">2024</td><td class="p">24%</td></tr>
+      <tr><td>10</td><td>400 m hurdles<small>McLaughlin-Levrone, women</small></td><td class="mark">50.37</td><td class="yr">2024</td><td class="p">24%</td></tr>
     </table>
   </div>
-  <p class="note">Model output as of the July 2026 run, from <code>tables/current_record_vulnerability.csv</code>. Men's events unless marked (W).</p>
+  <p class="note">From <code>tables/watchlist.csv</code> (run of 28 October 2026). All 46 records, with intervals and a five-year
+  horizon, are in the <a href="overview/#watchlist">sortable watchlist</a>. The backtest says to trust the order more than the levels.</p>
 
-  <h2>Records fall early, and modern ones less often</h2>
-  <p>The Kaplan-Meier median reign is 1.5 years. Most of the risk comes right after a record is set,
-  and records that get through the first few years flatten into a long tail. Split by era, the median
-  is about 1.2 years for the 170 records set before 1980 and about 2.0 years for the 78 set since.</p>
+  <h2>The backtest</h2>
+  <p>I cut the data at the end of 2010, fitted the model on what was known then, and asked for each of the 46
+  records standing that day: what is the chance this falls by 2025? 26 of them fell. The model's Brier score
+  was 0.235 against 0.329 for the historical base rate and 0.250 for the Kaplan-Meier method the July version
+  used. A rolling version, refitting every year from 1985 to 2020, shows the weak spot: records the model
+  gave about a coin flip fell only about a quarter of the time.</p>
   <figure>
-    <img width="1200" height="750" src="figures/record_survival.png" alt="Kaplan-Meier survival curves for world records set before 1980 and from 1980 on. Both fall below one half within about two years, and the post-1980 curve sits above the older one for most of the range.">
-    <figcaption>Kaplan-Meier survival by era, with 95% confidence bands.</figcaption>
+    <img width="825" height="780" src="figures/backtest_reliability.png" alt="Reliability plot of the rolling backtest. Below 40 percent predicted, the share of records that fell is close to the prediction; above that it falls well short, for example 24 percent observed where 50 percent was predicted.">
+    <figcaption>Rolling backtest, 1,535 five-year predictions. Points below the dotted line are overconfident.</figcaption>
   </figure>
 
   <h2>What makes a record last</h2>
   <ol class="facts">
-    <li><span><b>Era.</b> A record set in 1980 or later has a Cox hazard ratio of 0.52 (p &lt; 0.001): about half the yearly risk of being broken.</span></li>
-    <li><span><b>Margin.</b> Each percentage point by which a record beat the previous one multiplies the hazard by 0.65 (p = 0.0002). Big jumps, like Beamon's, last.</span></li>
-    <li><span><b>Event type.</b> Distance events come out at 0.78, which is not significant at the 5% level (p = 0.07).</span></li>
+    <li><span><b>The period it is at risk in.</b> Since 2000, records fall at about half the rate of 1980 to 1999 (hazard ratio 0.53).</span></li>
+    <li><span><b>Margin.</b> Each percentage point by which a record beat the one before it cuts the hazard by about a fifth (0.79).</span></li>
+    <li><span><b>A busy event.</b> Events that have just seen records keep seeing them (1.28 per unit of log count of records in the last three years).</span></li>
+    <li><span><b>Event group.</b> Throws and jumps records fall about twice as fast as sprint records. Half are gone inside a year.</span></li>
   </ol>
+  <figure>
+    <img width="1275" height="750" src="figures/survival_by_group.png" alt="Kaplan-Meier survival curves for sprints, middle distance, jumps and throws. Jumps and throws drop below one half before one year; sprints last longest with a median of about three years.">
+    <figcaption>Kaplan-Meier survival for four of the ten event groups. The write-up has all ten, with the model's curve.</figcaption>
+  </figure>
 
-  <h2>The data had to pass a gate</h2>
-  <p>Progressions come from Wikipedia's record-progression pages. Those pages mix the progression itself
-  with all-time lists, so a naive scrape can silently drop decades. An event is kept only if its
-  reconstructed running best is within 0.5% of the ratified record, its history reaches back to 1970
-  or earlier, and it has at least 12 marks. Nine of 21 candidate events passed.</p>
-  <p>The model sees when records fell; it knows nothing about how many athletes are close to them now. The 0% for the
-  women's 800 m is partly mechanical: no reign in the data ends between 43 and 48 years, so the curve
-  is flat there. The <a href="overview/">full writeup</a> covers these limits and the Cox table.</p>
+  <h2>Rebuilt from World Athletics' lists</h2>
+  <p>The July 2026 version scraped Wikipedia and kept 9 of 21 events. It missed rows in the women's 800 m and
+  still listed Kiptum's 2:00:35 as the marathon record, three months after Sawe ran 1:59:30. This version reads
+  World Athletics' statistics handbook and progression pages, keeps hand and automatic timing apart, and fails
+  its own run if any current record differs from World Athletics' records page. The rules are in
+  <a href="https://github.com/lyhjeremy/world-record-half-lives/blob/main/docs/data_decisions.md">docs/data_decisions.md</a>.</p>
 </main>
 
 <footer class="wrap">
   Jeremy Lee · <a href="https://github.com/lyhjeremy/world-record-half-lives">Source on GitHub</a> ·
-  <a href="overview/">Full writeup</a> · Record data from Wikipedia · Kaplan-Meier and Cox via lifelines
+  <a href="overview/">Full writeup</a> · Record data from World Athletics · Models in SciPy and lifelines
 </footer>
 </body>
 </html>

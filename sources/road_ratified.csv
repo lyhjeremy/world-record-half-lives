@@ -1,0 +1,26 @@
+sex,event,group,mark,value,athlete,country,venue,date,status,source
+M,marathon,road,2:04:55,7495,Paul Tergat,KEN,Berlin,2003-09-28,ratified,https://worldathletics.org/records/by-progression/17427
+M,marathon,road,2:04:26,7466,Haile Gebrselassie,ETH,Berlin,2007-09-30,ratified,https://worldathletics.org/records/by-progression/17427
+M,marathon,road,2:03:59,7439,Haile Gebrselassie,ETH,Berlin,2008-09-28,ratified,https://worldathletics.org/records/by-progression/17427
+M,marathon,road,2:03:38,7418,Patrick Makau,KEN,Berlin,2011-09-25,ratified,https://worldathletics.org/records/by-progression/17427
+M,marathon,road,2:03:23,7403,Wilson Kipsang,KEN,Berlin,2013-09-29,ratified,https://worldathletics.org/records/by-progression/17427
+M,marathon,road,2:02:57,7377,Dennis Kimetto,KEN,Berlin,2014-09-28,ratified,https://worldathletics.org/records/by-progression/17427
+M,marathon,road,2:01:39,7299,Eliud Kipchoge,KEN,Berlin,2018-09-16,ratified,https://worldathletics.org/records/by-progression/17427
+M,marathon,road,2:01:09,7269,Eliud Kipchoge,KEN,Berlin,2022-09-25,ratified,https://worldathletics.org/records/by-progression/17427
+M,marathon,road,2:00:35,7235,Kelvin Kiptum,KEN,"Chicago, IL",2023-10-08,ratified,https://worldathletics.org/records/by-progression/17427
+M,marathon,road,1:59:30,7170,Sabastian Sawe,KEN,London,2026-04-26,ratified,https://worldathletics.org/records/by-progression/17427
+W,marathon,road,2:15:25,8125,Paula Radcliffe,GBR,London,2003-04-13,ratified,https://worldathletics.org/records/by-progression/6240
+W,marathon,road,2:14:04,8044,Brigid Kosgei,KEN,"Chicago, IL",2019-10-13,ratified,https://worldathletics.org/records/by-progression/6240
+W,marathon,road,2:11:53,7913,Tigst Assefa,ETH,Berlin,2023-09-24,ratified,https://worldathletics.org/records/by-progression/6240
+W,marathon,road,2:09:56,7796,Ruth Chepngetich,KEN,"Chicago, IL",2024-10-13,ratified,https://worldathletics.org/records/by-progression/6240
+M,20kw,walk,1:17:21,4641,Jefferson Pérez,ECU,Paris-St-Denis,2003-08-23,ratified,https://worldathletics.org/records/by-progression/1895
+M,20kw,walk,1:17:16,4636,Vladimir Kanaykin,RUS,Saransk,2007-09-29,ratified,https://worldathletics.org/records/by-progression/1895
+M,20kw,walk,1:17:02,4622,Yohann Diniz,FRA,Arles,2015-03-08,ratified,https://worldathletics.org/records/by-progression/1895
+M,20kw,walk,1:16:36,4596,Yusuke Suzuki,JPN,Nomi,2015-03-15,ratified,https://worldathletics.org/records/by-progression/1895
+M,20kw,walk,1:16:10,4570,Toshikazu Yamanishi,JPN,Kobe,2025-02-16,ratified,https://worldathletics.org/records/by-progression/1895
+W,20kw,walk,1:26:22,5182,Wang Yan,CHN,Guangzhou,2001-11-19,ratified,https://worldathletics.org/records/by-progression/6363
+W,20kw,walk,1:26:22,5182,Yelena Nikolayeva,RUS,Cheboksary,2003-05-18,ratified,https://worldathletics.org/records/by-progression/6363
+W,20kw,walk,1:25:41,5141,Olimpiada Ivanova,RUS,Helsinki,2005-08-07,ratified,https://worldathletics.org/records/by-progression/6363
+W,20kw,walk,1:25:08,5108,Vera Sokolova,RUS,Sochi,2011-02-26,ratified,https://worldathletics.org/records/by-progression/6363
+W,20kw,walk,1:24:38,5078,Liu Hong,CHN,La Coruña,2015-06-06,ratified,https://worldathletics.org/records/by-progression/6363
+W,20kw,walk,1:23:49,5029,Yang Jiayu,CHN,Huangshan,2021-03-20,ratified,https://worldathletics.org/records/by-progression/6363

@@ -1,0 +1,96 @@
+key,type,sex,event,mark,athlete,date_set,years,status,wikipedia_match,note
+M|100m|10.2|1936-06-20,reign over 20 years,M,100m,10.2,Jesse Owens,1936-06-20,20.1,broken,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|1500m|3:26.00|1998-07-14,reign over 20 years,M,1500m,3:26.00,Hicham El Guerrouj,1998-07-14,28.3,standing,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|400h|46.78|1992-08-06,reign over 20 years,M,400h,46.78,Kevin Young,1992-08-06,28.9,broken,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|hj|2.45|1993-07-27,reign over 20 years,M,hj,2.45,Javier Sotomayor,1993-07-27,33.3,standing,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|lj|8.13|1935-05-25,reign over 20 years,M,lj,8.13,Jesse Owens,1935-05-25,25.2,broken,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|lj|8.90|1968-10-18,reign over 20 years,M,lj,8.90,Bob Beamon,1968-10-18,22.9,broken,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|lj|8.95|1991-08-30,reign over 20 years,M,lj,8.95,Mike Powell,1991-08-30,35.2,standing,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|tj|15.52|1911-05-30,reign over 20 years,M,tj,15.52,Daniel Ahearn,1911-05-30,20.4,broken,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|tj|18.29|1995-08-07,reign over 20 years,M,tj,18.29,Jonathan Edwards,1995-08-07,31.2,standing,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|sp|23.12|1990-05-20,reign over 20 years,M,sp,23.12,Randy Barnes,1990-05-20,31.1,broken,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|dt|74.08|1986-06-06,reign over 20 years,M,dt,74.08,Jürgen Schult,1986-06-06,37.9,broken,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|ht|57.77|1913-08-17,reign over 20 years,M,ht,57.77,Pat Ryan,1913-08-17,25.0,broken,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|ht|86.74|1986-08-30,reign over 20 years,M,ht,86.74,Yuriy Sedykh,1986-08-30,40.2,standing,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|jt|98.48|1996-05-25,reign over 20 years,M,jt,98.48,Jan Železný,1996-05-25,30.4,standing,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|4x100|39.8|1936-08-09,reign over 20 years,M,4x100,39.8,United States,1936-08-09,20.3,broken,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|4x400|2:56.1|1968-10-20,reign over 20 years,M,4x400,2:56.1,United States,1968-10-20,23.8,broken,False,"Mexico City Olympic final. The handbook lists the hand time 2:56.1 and, as a later ratified entry, 2:56.16 (the same team, auto-timed, 1988 Seoul). Wikipedia shows 2:56.16 for 1968, so the mismatch is format only. The 1988 2:56.16 equals rather than beats it, so the reign runs to 2:55.74 in 1992."
+M|4x400|2:54.29|1993-08-22,reign over 20 years,M,4x400,2:54.29,United States,1993-08-22,33.2,standing,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|100m|10.49|1988-07-16,reign over 20 years,W,100m,10.49,Florence Griffith Joyner,1988-07-16,38.3,standing,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|200m|21.34|1988-09-29,reign over 20 years,W,200m,21.34,Florence Griffith Joyner,1988-09-29,38.1,standing,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|400m|47.60|1985-10-06,reign over 20 years,W,400m,47.60,Marita Koch,1985-10-06,41.1,standing,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|800m|1:53.28|1983-07-26,reign over 20 years,W,800m,1:53.28,Jarmila Kratochvílová,1983-07-26,43.3,standing,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|1500m|3:50.46|1993-09-11,reign over 20 years,W,1500m,3:50.46,Qu Junxia,1993-09-11,21.8,broken,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|10000m|29:31.78|1993-09-08,reign over 20 years,W,10000m,29:31.78,Wang Junxia,1993-09-08,22.9,broken,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|100h|12.21|1988-08-20,reign over 20 years,W,100h,12.21,Yordanka Donkova,1988-08-20,27.9,broken,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|hj|2.09|1987-08-30,reign over 20 years,W,hj,2.09,Stefka Kostadinova,1987-08-30,36.9,broken,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|lj|7.52|1988-06-11,reign over 20 years,W,lj,7.52,Galina Chistyakova,1988-06-11,38.4,standing,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|tj|15.50|1995-08-10,reign over 20 years,W,tj,15.50,Inessa Kravets,1995-08-10,26.0,broken,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|sp|22.63|1987-06-07,reign over 20 years,W,sp,22.63,Natalya Lisovskaya,1987-06-07,39.4,standing,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|dt|76.80|1988-07-09,reign over 20 years,W,dt,76.80,Gabriele Reinsch,1988-07-09,38.3,standing,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|hep|7291|1988-09-24,reign over 20 years,W,hep,7291,Jackie Joyner-Kersee,1988-09-24,38.1,standing,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|4x100|41.37|1985-10-06,reign over 20 years,W,4x100,41.37,German Democratic Republic,1985-10-06,26.8,broken,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|4x400|3:15.17|1988-10-01,reign over 20 years,W,4x400,3:15.17,USSR,1988-10-01,38.1,standing,True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|10000m|27:39.4|1965-07-14,large jump,M,10000m,27:39.4,Ron Clarke,1965-07-14,2.13,improvement 2.13% (event median 0.41%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|100m|10.4|1921-04-23,large jump,M,100m,10.4,Charley Paddock,1921-04-23,1.89,improvement 1.89% (event median 0.36%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|110h|13.7|1936-08-27,large jump,M,110h,13.7,Forrest Towns,1936-08-27,2.84,improvement 2.84% (event median 0.70%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|4x100|41.0|1924-07-13,large jump,M,4x100,41.0,United States,1924-07-13,2.38,improvement 2.38% (event median 0.46%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|5000m|14:17.0|1932-06-19,large jump,M,5000m,14:17.0,Lauri Lehtinen,1932-06-19,1.29,improvement 1.29% (event median 0.26%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|5000m|13:58.2|1942-09-20,large jump,M,5000m,13:58.2,Gunder Hägg,1942-09-20,1.25,improvement 1.25% (event median 0.26%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|5000m|12:44.39|1995-08-16,large jump,M,5000m,12:44.39,Haile Gebrselassie,1995-08-16,1.41,improvement 1.41% (event median 0.26%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|dec|8790.46|1934-07-08,large jump,M,dec,8790.46,Hans-Heinrich Sievert,1934-07-08,3.88,improvement 3.88% (event median 0.78%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|dec|8302|1958-07-28,large jump,M,dec,8302,Rafer Johnson,1958-07-28,3.59,improvement 3.59% (event median 0.78%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|dec|8683|1960-07-09,large jump,M,dec,8683,Rafer Johnson,1960-07-09,3.9,improvement 3.90% (event median 0.78%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|dec|9121|1963-04-28,large jump,M,dec,9121,Yang Chuan-Kwang,1963-04-28,5.04,improvement 5.04% (event median 0.78%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|hj|2.22|1960-07-01,large jump,M,hj,2.22,John Thomas,1960-07-01,1.83,improvement 1.83% (event median 0.44%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|ht|73.74|1965-09-04,large jump,M,ht,73.74,Gyula Zsivótzky,1965-09-04,3.48,improvement 3.48% (event median 0.79%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|jt|66.10|1919-08-24,large jump,M,jt,66.10,Jonni Myyrä,1919-08-24,6.07,improvement 6.07% (event median 1.13%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|jt|69.88|1927-10-08,large jump,M,jt,69.88,Eino Penttilä,1927-10-08,4.89,improvement 4.89% (event median 1.13%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|jt|91.72|1964-09-02,large jump,M,jt,91.72,Terje Pedersen,1964-09-02,5.28,improvement 5.28% (event median 1.13%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|jt|104.80|1984-07-20,large jump,M,jt,104.80,Uwe Hohn,1984-07-20,5.09,improvement 5.09% (event median 1.13%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|lj|8.90|1968-10-18,large jump,M,lj,8.90,Bob Beamon,1968-10-18,6.59,improvement 6.59% (event median 0.56%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|pv|4.09|1920-08-20,large jump,M,pv,4.09,Frank Foss,1920-08-20,1.74,improvement 1.74% (event median 0.35%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|pv|4.21|1923-07-22,large jump,M,pv,4.21,Charles Hoff,1923-07-22,2.18,improvement 2.18% (event median 0.35%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|pv|4.37|1932-07-16,large jump,M,pv,4.37,Bill Graber,1932-07-16,1.63,improvement 1.63% (event median 0.35%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|pv|4.54|1937-05-29,large jump,M,pv,4.54,Bill Sefton,1937-05-29,2.48,improvement 2.48% (event median 0.35%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|pv|4.72|1941-06-06,large jump,M,pv,4.72,Cornelius Warmerdam,1941-06-06,2.61,improvement 2.61% (event median 0.35%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|pv|5.08|1963-06-07,large jump,M,pv,5.08,Brian Sternberg,1963-06-07,1.6,improvement 1.60% (event median 0.35%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|pv|5.63|1972-07-02,large jump,M,pv,5.63,Bob Seagren,1972-07-02,1.44,improvement 1.44% (event median 0.35%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|sp|17.40|1934-08-05,large jump,M,sp,17.40,Jack Torrance,1934-08-05,3.02,improvement 3.02% (event median 0.52%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|sp|18.42|1954-05-08,large jump,M,sp,18.42,Parry O’Brien,1954-05-08,2.11,improvement 2.11% (event median 0.52%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|sp|20.68|1964-07-25,large jump,M,sp,20.68,Dallas Long,1964-07-25,2.38,improvement 2.38% (event median 0.52%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|sp|21.52|1965-05-08,large jump,M,sp,21.52,Randy Matson,1965-05-08,4.06,improvement 4.06% (event median 0.52%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+M|tj|17.89|1975-10-15,large jump,M,tj,17.89,João Carlos de Oliveira,1975-10-15,2.58,improvement 2.58% (event median 0.53%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|100m|12.8|1922-08-20,large jump,W,100m,12.8,Mary Lines,1922-08-20,5.88,improvement 5.88% (event median 0.88%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|200m|26.8y|1922-09-23,large jump,W,200m,26.8y,Mary Lines,1922-09-23,4.16,improvement 4.16% (event median 0.95%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|200m|23.6|1935-08-04,large jump,W,200m,23.6,Stanisława Walasiewicz,1935-08-04,4.07,improvement 4.07% (event median 0.95%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|4x100|51.4+|1922-08-20,large jump,W,4x100,51.4+,Great Britain & NI,1922-08-20,3.38,improvement 3.38% (event median 0.57%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|4x100|46.9|1932-08-07,large jump,W,4x100,46.9,United States,1932-08-07,3.1,improvement 3.10% (event median 0.57%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|dt|30.225|1924-09-14,large jump,W,dt,30.225,Lucienne Velu,1924-09-14,6.71,improvement 6.71% (event median 1.13%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|dt|34.15|1926-05-23,large jump,W,dt,34.15,Halina Konopacka,1926-05-23,9.63,improvement 9.63% (event median 1.13%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|dt|38.34|1926-08-22,large jump,W,dt,38.34,Milly Reuter,1926-08-22,12.27,improvement 12.27% (event median 1.13%),True,"Confirmed on Wikipedia (Milly Reuter, 1926). The women's discus list starts in 1923 and the record rose 40% in its first five years, so a 12% step is in line with the early series. Kept; the improvement covariate is capped at 5%."
+W|dt|53.25|1948-08-08,large jump,W,dt,53.25,Nina Dumbadze,1948-08-08,10.23,improvement 10.23% (event median 1.13%),True,"Confirmed on Wikipedia (Nina Dumbadze, 1948). It follows a 12-year gap with no record (1936 to 1948, including the war years). Kept; the improvement covariate is capped at 5%."
+W|dt|57.04|1952-10-18,large jump,W,dt,57.04,Nina Dumbadze,1952-10-18,6.4,improvement 6.40% (event median 1.13%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|hep|7148|1986-07-07,large jump,W,hep,7148,Jackie Joyner,1986-07-07,4.09,improvement 4.09% (event median 0.85%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|hj|1.524|1925-07-11,large jump,W,hj,1.524,Phyllis Green,1925-07-11,2.63,improvement 2.63% (event median 0.56%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|hj|1.71|1943-05-30,large jump,W,hj,1.71,Fanny Blankers-Koen,1943-05-30,3.01,improvement 3.01% (event median 0.56%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|ht|71.22|1997-06-22,large jump,W,ht,71.22,Olga Kuzenkova,1997-06-22,2.36,improvement 2.36% (event median 0.47%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|ht|73.10|1997-06-22,large jump,W,ht,73.10,Olga Kuzenkova,1997-06-22,2.64,improvement 2.64% (event median 0.47%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|ht|75.29|1999-05-13,large jump,W,ht,75.29,Mihaela Melinte,1999-05-13,2.94,improvement 2.94% (event median 0.47%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|ht|81.08|2015-08-01,large jump,W,ht,81.08,Anita Włodarczyk,2015-08-01,1.88,improvement 1.88% (event median 0.47%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|jt|27.24|1924-05-25,large jump,W,jt,27.24,Marie Janderová,1924-05-25,7.56,improvement 7.56% (event median 1.69%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|jt|37.575|1927-06-12,large jump,W,jt,37.575,Guschi Hargus,1927-06-12,37.94,improvement 37.94% (event median 1.69%),True,"Confirmed on Wikipedia (Guschi Hargus, 1927, after 27.24 in 1924). A 38% step, by far the largest in the data. Kept as World Athletics lists it; the improvement covariate is capped at 5% so this row cannot drive the margin effect."
+W|jt|53.41|1949-08-05,large jump,W,jt,53.41,Natalya Smirnitskaya,1949-08-05,7.7,improvement 7.70% (event median 1.69%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|lj|5.485|1926-08-02,large jump,W,lj,5.485,Muriel Gunn,1926-08-02,3.49,improvement 3.49% (event median 0.87%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|lj|5.98|1928-05-20,large jump,W,lj,5.98,Kinue Hitomi,1928-05-20,7.26,improvement 7.26% (event median 0.87%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|pv|4.41|1996-01-28,large jump,W,pv,4.41,Emma George,1996-01-28,3.04,improvement 3.04% (event median 0.24%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|pv|4.50|1997-02-08,large jump,W,pv,4.50,Emma George,1997-02-08,1.12,improvement 1.12% (event median 0.24%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|pv|4.55|1997-02-20,large jump,W,pv,4.55,Emma George,1997-02-20,1.11,improvement 1.11% (event median 0.24%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|pv|4.81|2001-06-09,large jump,W,pv,4.81,Stacy Dragila,2001-06-09,2.12,improvement 2.12% (event median 0.24%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|sp|10.84|1927-05-28,large jump,W,sp,10.84,Ruth Lange,1927-05-28,6.8,improvement 6.80% (event median 1.07%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|sp|11.32|1927-08-06,large jump,W,sp,11.32,Ruth Lange,1927-08-06,4.43,improvement 4.43% (event median 1.07%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|sp|12.85|1929-07-21,large jump,W,sp,12.85,Grete Heublein,1929-07-21,7.44,improvement 7.44% (event median 1.07%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|sp|13.70|1931-08-16,large jump,W,sp,13.70,Grete Heublein,1931-08-16,6.37,improvement 6.37% (event median 1.07%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|sp|14.38|1934-07-15,large jump,W,sp,14.38,Gisela Mauermayer,1934-07-15,4.96,improvement 4.96% (event median 1.07%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|sp|16.20|1953-10-09,large jump,W,sp,16.20,Galina Zybina,1953-10-09,5.06,improvement 5.06% (event median 1.07%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
+W|sp|18.55|1962-06-10,large jump,W,sp,18.55,Tamara Press,1962-06-10,4.33,improvement 4.33% (event median 1.07%),True,Same mark and year in the WA handbook and on Wikipedia; kept as listed.
