@@ -1,10 +1,14 @@
+# Upper bounds sit just above the versions the pipeline last ran on
+# (Python 3.13, 5 November 2026): pandas 2.3.3, numpy 2.5.4, scipy 1.18.1,
+# lifelines 0.30.3, matplotlib 3.11.2, lxml 6.1.3. pandas 3 is excluded until tested.
+
 # Data
-pandas>=2.0
-lxml>=4.9              # pandas.read_html for the Wikipedia cross-check
+pandas>=2.0,<3
+lxml>=4.9,<7           # pandas.read_html for the Wikipedia cross-check
 # pdftotext (poppler) must be on PATH for fetch_data.py: brew install poppler
 
 # Modeling
-numpy>=1.24
-scipy>=1.10            # frailty Weibull likelihood
-lifelines>=0.27        # Kaplan-Meier, Cox, AFT models
-matplotlib>=3.7
+numpy>=1.24,<2.6
+scipy>=1.10,<1.19      # frailty Weibull likelihood
+lifelines>=0.27,<0.31  # Kaplan-Meier, Cox, AFT models
+matplotlib>=3.7,<3.12

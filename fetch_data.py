@@ -193,7 +193,7 @@ def assign_years(rows: list[dict], floor_year: int) -> None:
                 t = pd.Timestamp(year=c + r["yy"], month=r["m"], day=r["d"])
             except ValueError:
                 continue
-            if prev - pd.Timedelta(days=1) <= t <= pd.Timestamp("2022-06-01"):
+            if prev - pd.Timedelta(1, unit="D") <= t <= pd.Timestamp("2022-06-01"):
                 best = t
                 break
         r["date"] = best
