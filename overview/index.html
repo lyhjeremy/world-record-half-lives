@@ -315,6 +315,22 @@
   .wl .dt { white-space: nowrap; }
   .pbar { margin-left: auto; }
   .wl .mob { display: none; }
+  /* At a glance, set as a start list: one lane per fact */
+  .glance { margin: 30px 0 4px; max-width: 62rem; border-top: 7px double var(--accent); border-bottom: 2px solid var(--ink); }
+  .glance h2 { font-size: clamp(22px, 2.6vw, 28px); margin: 14px 0 6px; }
+  .glance ol { list-style: none; margin: 0; padding: 0; counter-reset: gl; }
+  .glance li { counter-increment: gl; display: grid; grid-template-columns: 2.1rem 8.4rem minmax(0, 1fr); gap: 0 12px;
+               align-items: baseline; padding: 8px 0; border-top: 1px solid var(--rule); }
+  .glance li::before { content: counter(gl); font: 800 22px/1 var(--display); color: var(--muted); text-align: center; }
+  .glance li.res::before { color: var(--accent); }
+  .glance .k { font: 600 12px/1.4 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink); }
+  .glance .v { font-family: var(--sans); font-size: 15px; line-height: 1.45; color: var(--ink2); }
+  .glance li.res .v { color: var(--ink); font-weight: 600; }
+  .glance-src { font-family: var(--sans); font-size: 12.5px; color: var(--muted); margin: 0; padding: 8px 0 10px; border-top: 1px solid var(--rule); }
+  @media (max-width: 640px) {
+    .glance li { grid-template-columns: 2.1rem minmax(0, 1fr); }
+    .glance .v { grid-column: 2; }
+  }
   @media (max-width: 640px) {
     .wl table { min-width: 0; font-size: 14px; }
     .wl .c-h, .wl .c-d, .wl .c-a { display: none; }
@@ -336,13 +352,26 @@
     <h1>Which world records fall before LA 2028</h1>
 
     <p class="hero-sub">
-      I rebuilt the ratified progression of all 46 Olympic athletics events from World
-      Athletics' own lists and treated each record as a survival time. A model fitted only
-      on what was known at the end of 2010 beat the historical base rate on what happened
-      from 2011 to 2025, though it ran overconfident. Applied today, it puts Duplantis's
-      6.31 pole vault first in line to fall before the Games close (48%) and Florence
-      Griffith Joyner's 10.49 last (5%).
+      Fitted only on what was known at the end of 2010, a survival model of every Olympic
+      athletics world record scored a Brier of <strong>0.235</strong> on what fell from 2011 to
+      2025, against <strong>0.329</strong> for the historical base rate (lower is better), though it
+      ran overconfident. Applied today, it puts Duplantis's 6.31 pole vault first in line to fall
+      before the LA 2028 Games close (<strong>48%</strong>) and Florence Griffith Joyner's 10.49 last
+      (5%). The records come from World Athletics' own lists for all 46 events.
     </p>
+
+    <section class="glance" aria-labelledby="glance-h">
+      <h2 id="glance-h">At a glance</h2>
+      <ol>
+        <li><span class="k">Question</span><span class="v">How long does a world record stand, and which of today's 46 is most likely to fall before LA 2028?</span></li>
+        <li><span class="k">Data</span><span class="v">1,464 ratified records forming 1,251 reigns in 46 Olympic events, from World Athletics' lists, current to 28 October 2026</span></li>
+        <li><span class="k">Method</span><span class="v">Weibull proportional-hazards model with a gamma frailty per event; Kaplan-Meier and Cox as baselines</span></li>
+        <li><span class="k">Holdout</span><span class="v">Fit to 2010, scored on the 46 records standing then (26 fell by 2025). Brier 0.235 against 0.329 for the base rate and 0.250 for Kaplan-Meier; gain 0.093, 90% interval 0.030 to 0.157</span></li>
+        <li class="res"><span class="k">Result</span><span class="v">Pole vault 6.31 most likely to fall before 30 July 2028: 48% (90% interval 19 to 57%). Women's 100 m 10.49 least likely: 5%</span></li>
+        <li><span class="k">Limit</span><span class="v">Overconfident: in the rolling backtest, records given 40 to 60% fell 24% of the time. The final covariates were chosen after seeing the 2010 scores</span></li>
+      </ol>
+      <p class="glance-src">From <code>tables/backtest_summary.csv</code>, <code>tables/reliability_rolling.csv</code> and <code>tables/watchlist.csv</code>.</p>
+    </section>
 
     <div class="cta-row">
       <a class="btn btn-primary" href="#watchlist">Go to the watchlist</a>
@@ -425,7 +454,7 @@
     <p class="eyebrow">The backtest</p>
     <h2>Fit to 2010, score on 2011 to 2025</h2>
     <p>
-      The only fair test of a forecast is time. I cut the data at 31 December 2010: records set
+      A forecast has to be tested on time it has not seen. I cut the data at 31 December 2010: records set
       later were removed, and reigns still running were censored at that date. The model was
       fitted on that, then asked for each of the 46 records standing at the cut: what is the chance
       this falls in the next 15 years? Then I checked what happened. 26 of the 46 fell.
@@ -774,7 +803,7 @@
       var pw = W - m.l - m.r, ph = H - m.t - m.b;
       var X = function (v) { return m.l + v * pw; }, Y = function (v) { return m.t + (1 - v) * ph; };
       box.textContent = "";
-      var svg = el("svg", { viewBox: "0 0 " + W + " " + H, role: "img",
+      var svg = el("svg", { viewBox: "0 0 " + W + " " + H, role: "group",
         "aria-label": "Reliability of the backtest: predicted chance of falling against the share that fell. Above 40 percent predicted, the share that fell is well below the prediction." }, box);
       [0, .25, .5, .75, 1].forEach(function (v) {
         el("line", { x1: m.l, x2: m.l + pw, y1: Y(v), y2: Y(v), "class": "grid" }, svg);

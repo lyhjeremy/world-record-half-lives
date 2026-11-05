@@ -1,6 +1,7 @@
 # World-record half-lives
 
-A survival analysis of every ratified athletics world record in the 46 Olympic events: how long records stand, what makes them last, how well that forecasts what actually fell, and which of today's records is most likely to go before the LA 2028 Olympics close.
+How long does an athletics world record stand, and can a record's history forecast which of today's 46 Olympic-event records falls next?
+Fitted only on records known at the end of 2010, a Weibull survival model with a frailty per event scored a Brier of 0.235 on the 46 records standing then (26 fell by 2025), against 0.329 for the historical base rate; it runs overconfident, and it ranks Duplantis's 6.31 pole vault first to fall before LA 2028, at 48%.
 
 [Live site](https://lyhjeremy.github.io/world-record-half-lives/) · [Write-up and watchlist](https://lyhjeremy.github.io/world-record-half-lives/overview/) · [Long-form notes](writeup.md) · [Data decisions](docs/data_decisions.md)
 
