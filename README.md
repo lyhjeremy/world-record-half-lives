@@ -44,6 +44,7 @@ Python, pandas, NumPy, SciPy, lifelines, matplotlib, poppler (`pdftotext`). The 
 ```bash
 python -m venv ~/venvs/world-record-half-lives
 ~/venvs/world-record-half-lives/bin/pip install -r requirements.txt
+source ~/venvs/world-record-half-lives/bin/activate   # the commands below assume this
 # needs pdftotext (brew install poppler)
 python fetch_data.py            # handbook PDF -> ~/data-cache/..., tables/progressions.csv
 python crosscheck_wikipedia.py  # tables/wikipedia_crosscheck.csv
